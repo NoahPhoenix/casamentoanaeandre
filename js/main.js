@@ -1,3 +1,4 @@
+import confetti from 'canvas-confetti';
 import { inicializarDashboard } from './dashboard.js';
 
 // --- 1. CONFIGURAÇÃO FIREBASE ---
@@ -80,11 +81,27 @@ if (mainContainer) {
         }
     }
 
-    // Clique no Envelope
-    mainContainer.addEventListener('click', function() {
+    if (mainContainer) {
+    mainContainer.addEventListener('click', function(e) {
+        // Log para depuração - verifique se aparece no F12 do navegador
+        console.log("Envelope clicado!");
+
         if (!this.classList.contains('open')) {
-            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, zIndex: 1000 });
+            // Disparar o confete usando a biblioteca importada no topo
+            try {
+                confetti({
+                    particleCount: 150,
+                    spread: 100,
+                    origin: { y: 0.6 },
+                    zIndex: 2000 // Valor alto para garantir visibilidade sobre a carta
+                });
+                console.log("Confete disparado com sucesso!");
+            } catch (err) {
+                console.error("Erro ao disparar confete:", err);
+            }
+            
             this.classList.add('open');
         }
     });
+}
 }
