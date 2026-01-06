@@ -1,3 +1,4 @@
+console.log("Script main.js carregado com sucesso!");
 // --- 1. CONFIGURAÇÃO FIREBASE ---
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
