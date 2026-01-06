@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard André & Ana</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+<script type="module" src="js/main.js"></script>
+    
     
     <style>
         body { font-family: 'Montserrat', sans-serif; background: #fdfaf6; padding: 10px; color: #444; margin: 0; }
@@ -103,161 +105,5 @@
        
     </div>
 </div>
-
-<script type="module">
-    const firebaseConfig = {
-        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-        authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-        databaseURL: "https://casamente-ana-e-andre-default-rtdb.firebaseio.com",
-        projectId: "casamente-ana-e-andre",
-        storageBucket: "casamente-ana-e-andre.firebasestorage.app",
-        messagingSenderId: "867047379076",
-        appId: "1:867047379076:web:13e2b353f28b507c3a32d1"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    const convidadosRef = database.ref('wedding/convidados');
-
-    let dadosLocais = {};
-    let editandoId = null;
-
-    function adicionarConvidado() {
-        const n = document.getElementById('nome').value;
-        const e = document.getElementById('email').value;
-        const w = document.getElementById('whatsapp').value;
-        if (!n) return alert("Digite o nome!");
-        convidadosRef.push({ nome: n, email: e, whatsapp: w, status: 'nao_enviado' });
-        document.getElementById('nome').value = ''; 
-        document.getElementById('email').value = ''; 
-        document.getElementById('whatsapp').value = '';
-    }
-
-    function renderizarTabela() {
-        const lista = document.getElementById('listaConvidados');
-        lista.innerHTML = '';
-        let t = 0, p = 0, e = 0, c_count = 0;
-
-        // Bloqueia botões do cabeçalho se estiver editando
-        const isEditingAny = (editandoId !== null);
-        document.getElementById('btnExportar').disabled = isEditingAny;
-        document.getElementById('btnAdd').disabled = isEditingAny;
-        document.getElementById('btnVerConvite').classList.toggle('disabled', isEditingAny);
-
-        Object.keys(dadosLocais).forEach(id => {
-            const c = dadosLocais[id];
-            t++;
-            const bloqueadoStatus = (c.status === 'enviado' || c.status === 'confirmado');
-            const isThisEditing = (editandoId === id);
-            const isOtherEditing = (editandoId !== null && editandoId !== id);
-
-            if(c.status === 'confirmado')
-			{
-				c_count++; 
-				e++;
-			}
-			else if(c.status === 'enviado') e++; 
-			else p++;
-
-            const st = {
-                'confirmado': {label: 'Confirmado', class: 'st-confirmado', icon: '✅'},
-                'enviado': {label: 'Enviado', class: 'st-enviado', icon: '🔵'},
-                'nao_enviado': {label: 'Pendente', class: 'st-nao_enviado', icon: '⚪'}
-            }[c.status];
-
-            const tr = document.createElement('tr');
-            if(isThisEditing) {
-                tr.innerHTML = `
-                    <td data-label="Status">Editando...</td>
-                    <td data-label="Nome"><input type="text" id="edit-nome-field" value="${c.nome}"></td>
-                    <td data-label="E-mail"><input type="text" id="edit-email-field" value="${c.email||''}"></td>
-                    <td data-label="WhatsApp"><input type="text" id="edit-whats-field" value="${c.whatsapp||''}"></td>
-                    <td>-</td>
-                    <td data-label="Gerenciar">
-                        <div class="manage-cell">
-                            <button class="btn-action btn-save" onclick="salvarEdicao('${id}')">SALVAR</button>
-                            <button class="btn-action btn-cancel" onclick="cancelarEdicao()">CANCELAR</button>
-                        </div>
-                    </td>`;
-            } else {
-                tr.innerHTML = `
-                    <td data-label="Status"><div class="status-pill ${st.class}">${st.icon} ${st.label}</div></td>
-                    <td data-label="Nome"><strong>${c.nome}</strong></td>
-                    <td data-label="E-mail">${c.email || '-'}</td>
-                    <td data-label="WhatsApp">${c.whatsapp || '-'}</td>
-                    <td data-label="Envio">
-                        <div class="actions-cell">
-                            <button class="btn-action btn-email" ${bloqueadoStatus || isEditingAny ? 'disabled' : ''} onclick="enviar('${id}','email')">📧</button>
-                            <button class="btn-action btn-whats" ${bloqueadoStatus || isEditingAny ? 'disabled' : ''} onclick="enviar('${id}','whats')">📱</button>
-                            <button class="btn-action btn-copy" ${isEditingAny ? 'disabled' : ''} onclick="copiarLink('${id}')">🔗</button>
-                            <input type="checkbox" class="input-check-enviado" ${bloqueadoStatus ? 'checked' : ''} ${c.status === 'confirmado' || isEditingAny ? 'disabled' : ''} onchange="toggleStatus('${id}', this.checked)">
-                        </div>
-                    </td>
-                    <td data-label="Gerenciar">
-                        <div class="manage-cell">
-                            <button class="btn-action btn-edit" ${bloqueadoStatus || isEditingAny ? 'disabled' : ''} onclick="ativarEdicao('${id}')">✏️</button>
-                            <button class="btn-action btn-delete" ${isEditingAny ? 'disabled' : ''} onclick="excluirConvidado('${id}')">🗑️</button>
-                        </div>
-                    </td>`;
-            }
-            lista.appendChild(tr);
-        });
-        document.getElementById('statTotal').innerText = t; 
-        document.getElementById('statPendente').innerText = p; 
-        document.getElementById('statEnviado').innerText = e; 
-        document.getElementById('statConfirmado').innerText = c_count;
-    }
-
-    function ativarEdicao(id) { editandoId = id; renderizarTabela(); }
-    function cancelarEdicao() { editandoId = null; renderizarTabela(); }
-    
-    function salvarEdicao(id) {
-        const novoNome = document.getElementById('edit-nome-field').value;
-        const novoEmail = document.getElementById('edit-email-field').value;
-        const novoWhats = document.getElementById('edit-whats-field').value;
-        
-        if(!novoNome) return alert("O nome não pode ser vazio!");
-
-        convidadosRef.child(id).update({
-            nome: novoNome,
-            email: novoEmail,
-            whatsapp: novoWhats
-        }).then(() => {
-            editandoId = null; // Encerra o modo edição após sucesso
-            renderizarTabela(); // Garante a atualização visual imediata
-        }).catch((err) => alert("Erro ao salvar: " + err.message));
-    }
-
-    function toggleStatus(id, checked) { convidadosRef.child(id).update({status: checked ? 'enviado' : 'nao_enviado'}); }
-    function copiarLink(id) { navigator.clipboard.writeText(`https://casamentoanaeandre-otn1.vercel.app/convite.html?id=${id}`).then(() => alert("Link copiado!")); }
-
-    function enviar(id, tipo) {
-        const c = dadosLocais[id]; const link = `https://casamentoanaeandre-otn1.vercel.app/convite.html?id=${id}`;
-        const msg = `Olá ${c.nome}! Preparamos um convite para você: ${link}`;
-        if(tipo==='whats') window.open(`https://api.whatsapp.com/send?phone=55${c.whatsapp}&text=${encodeURIComponent(msg)}`);
-        else window.location.href = `mailto:${c.email}?subject=Nosso Convite&body=${encodeURIComponent(msg)}`;
-        convidadosRef.child(id).update({status: 'enviado'});
-    }
-
-    function excluirConvidado(id) { if(confirm("Excluir convidado?")) convidadosRef.child(id).remove(); }
-
-    document.getElementById('btnExportar').addEventListener('click', () => {
-        let t = 0, c_ok = 0, p_ok = 0;
-        const cabecalho = [["LISTA DE CONVIDADOS - ANDRÉ & ANA"], ["Data: " + new Date().toLocaleString()], [], ["NOME", "E-MAIL", "WHATSAPP", "STATUS", "LINK"]];
-        const dados = Object.keys(dadosLocais).map(id => {
-            const c = dadosLocais[id]; t++;
-            let st = c.status === 'confirmado' ? "✅ Confirmado" : (c.status === 'enviado' ? "🔵 Enviado" : "⚪ Pendente");
-            if(c.status === 'confirmado') c_ok++; else p_ok++;
-            return [c.nome.toUpperCase(), c.email||"-", c.whatsapp||"-", st, `https://casamentoanaeandre-otn1.vercel.app/convite.html?id=${id}`];
-        });
-        const resumo = [[], ["ESTATÍSTICAS"], ["TOTAL", t], ["CONFIRMADOS", c_ok], ["PENDENTES", p_ok]];
-        const ws = XLSX.utils.aoa_to_sheet(cabecalho.concat(dados).concat(resumo));
-        ws['!cols'] = [{wch:35}, {wch:30}, {wch:20}, {wch:18}, {wch:65}];
-        const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Convidados");
-        XLSX.writeFile(wb, `Lista_Casamento_Andre_Ana.xlsx`);
-    });
-
-    convidadosRef.on('value', snap => { dadosLocais = snap.val() || {}; renderizarTabela(); });
-</script>
 </body>
 </html>
