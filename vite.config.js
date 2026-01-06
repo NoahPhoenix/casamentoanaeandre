@@ -7,7 +7,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        convite: resolve(__dirname, 'convite.html'),
+        dashboard: resolve(__dirname, 'dashboard.html'),
       },
     },
   },

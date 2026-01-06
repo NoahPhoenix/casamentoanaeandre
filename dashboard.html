@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://cdn.jsdelivr.net https://*.firebaseio.com; 
+    script-src-elem 'self' 'unsafe-inline' https://www.gstatic.com https://cdn.jsdelivr.net https://*.firebaseio.com;
+    connect-src 'self' https://*.firebaseio.com wss://*.firebaseio.com https://www.gstatic.com; 
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+    font-src 'self' https://fonts.gstatic.com; 
+    img-src 'self' data: *; 
+    frame-src 'self';">
+    <title>Dashboard André & Ana</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+<script type="module" src="js/main.js"></script>
+    
+    
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background: #fdfaf6; padding: 10px; color: #444; margin: 0; }
+        .container { max-width: 1300px; margin: 0 auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        
+        .header-area { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px; gap: 10px; }
+        h1 { color: #8d6e63; margin: 0; font-size: 18px; }
+        
+        .header-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn-view-invite { background: #fff; color: #8d6e63; padding: 8px 12px; text-decoration: none; border-radius: 8px; font-size: 11px; font-weight: bold; border: 1px solid #d1c4e9; cursor: pointer; display: inline-flex; align-items: center; }
+
+        .form-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 25px; background: #f9f9f9; padding: 15px; border-radius: 10px; border: 1px solid #eee; }
+        input[type="text"], input[type="email"] { padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; font-size: 14px; width: 100%; box-sizing: border-box; }
+        
+        button { cursor: pointer; border: none; border-radius: 5px; font-weight: bold; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; }
+        .btn-add { background: #8d6e63; color: white; padding: 12px; text-transform: uppercase; width: 100%; }
+
+        /* Estilo para botões bloqueados */
+        button:disabled, .btn-view-invite.disabled { background-color: #ccc !important; color: #888 !important; cursor: not-allowed !important; opacity: 0.6 !important; pointer-events: none; }
+
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { text-align: left; padding: 12px 10px; border-bottom: 1px solid #eee; font-size: 13px; }
+        th { background: #f8f8f8; color: #8d6e63; text-transform: uppercase; font-size: 11px; }
+        
+        .status-pill { padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 5px; width: fit-content; }
+        .st-nao_enviado { background: #ececec; color: #666; }
+        .st-enviado { background: #e3f2fd; color: #1976d2; }
+        .st-confirmado { background: #e8f5e9; color: #2e7d32; }
+        
+        .actions-cell, .manage-cell { display: flex; gap: 8px; align-items: center; justify-content: center; }
+        .btn-action { padding: 10px 12px; font-size: 12px; color: white; border-radius: 6px; }
+        .btn-email { background: #d4af37; }
+        .btn-whats { background: #25d366; }
+        .btn-copy { background: #607d8b; }
+        .btn-edit { background: #5c6bc0; }
+        .btn-delete { background: #ff5252; }
+        .btn-save { background: #2ecc71; }
+        .btn-cancel { background: #95a5a6; padding: 10px 15px; }
+
+        /* RODAPÉ EM UMA LINHA SÓ */
+        .stats-footer { display: flex; justify-content: space-between; gap: 10px; padding: 15px; background: #fdfaf6; border-top: 2px solid #8d6e63; border-radius: 0 0 15px 15px; flex-wrap: nowrap; }
+        .stat-item { flex: 1; text-align: center; background: white; padding: 10px; border-radius: 8px; min-width: 100px; }
+        .stat-item span { display: block; font-size: 20px; font-weight: bold; color: #8d6e63; }
+        .stat-item label { font-size: 10px; color: #888; text-transform: uppercase; font-weight: 700; }
+
+        @media (max-width: 768px) {
+            thead { display: none; }
+            tr { display: flex; flex-direction: column; align-items: center; background: #fff; border: 1px solid #eee; margin-bottom: 25px; border-radius: 12px; padding: 15px; }
+            td { display: flex; flex-direction: column; align-items: center !important; text-align: center; padding: 12px 0; border-bottom: 1px solid #f9f9f9; width: 100%; font-size: 15px; }
+            td::before { content: attr(data-label); font-weight: bold; color: #8d6e63; font-size: 11px; text-transform: uppercase; margin-bottom: 6px; }
+            .stats-footer { flex-wrap: wrap; }
+            .stat-item { min-width: 45%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-area">
+        <h1>Gestão de Convidados</h1>
+        <div class="header-btns">
+            <button id="btnExportar" class="btn-view-invite" style="background: #e8f5e9; color: #2e7d32; border-color: #c8e6c9;">📊 GERAR PLANILHA</button>
+            <a href="index.html" id="btnVerConvite" target="_blank" class="btn-view-invite">👁️ VER CONVITE</a>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="text" id="nome" placeholder="Nome do Convidado">
+        <input type="email" id="email" placeholder="E-mail (opcional)">
+        <input type="text" id="whatsapp" placeholder="WhatsApp (DDD+Número)">
+        <button id="btnAdd" class="btn-add" onclick="adicionarConvidado()">Adicionar Convidado</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>WhatsApp</th>
+                <th style="text-align: center;">Envio / Link</th>
+                <th style="text-align: center;">Gerenciar</th>
+            </tr>
+        </thead>
+        <tbody id="listaConvidados"></tbody>
+    </table>
+
+    <div class="stats-footer">
+		<div class="stat-item"><span id="statPendente">0</span><label>Pendentes</label></div>
+		<div class="stat-item"><span id="statEnviado">0</span><label>Enviados</label></div>
+		 <div class="stat-item"><span id="statConfirmado" style="color: #2e7d32;">0</span><label>Confirmados</label></div>
+        <div class="stat-item"><span id="statTotal">0</span><label>Total</label></div>
+       
+    </div>
+</div>
+</body>
+</html>
