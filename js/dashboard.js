@@ -1,5 +1,29 @@
 export function inicializarDashboard(convidadosRef) {
+    const userSalvo = import.meta.env.VITE_DASH_USER;
+    const passSalvo = import.meta.env.VITE_DASH_PASS;
+    const modal = document.getElementById('loginModal');
 
+    // Função interna para validar
+    window.verificarAcesso = () => {
+        const u = document.getElementById('loginUser').value;
+        const p = document.getElementById('loginPass').value;
+
+        if (u === userSalvo && p === passSalvo) {
+            sessionStorage.setItem('dash_auth', 'true');
+            modal.style.display = 'none'; // Libera o dashboard
+        } else {
+            alert("Credenciais incorretas!");
+        }
+    };
+
+   const inputs = [document.getElementById('loginUser'), document.getElementById('loginPass')];
+inputs.forEach(input => {
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            window.verificarAcesso();
+        }
+    });
+});
 
     window.limparTodosConvidados = () => {
         // Primeira confirmação
