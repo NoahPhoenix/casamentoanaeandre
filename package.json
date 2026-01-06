@@ -1,0 +1,27 @@
+{
+  "name": "andre_e_ana_casamento---unsafe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+ "scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "preview": "vite preview"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NoahPhoenix/casamentoanaeandre.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/NoahPhoenix/casamentoanaeandre/issues"
+  },
+  "homepage": "https://github.com/NoahPhoenix/casamentoanaeandre#readme",
+  "devDependencies": {
+    "vite": "^7.3.0"
+  }
+  
+}
