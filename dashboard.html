@@ -71,6 +71,30 @@
             .stats-footer { flex-wrap: wrap; }
             .stat-item { min-width: 45%; }
         }
+        .debug-danger-btn {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    border: none;
+    background: rgba(0, 0, 0, 0.05); /* Bem transparente e discreto */
+    color: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    font-size: 14px;
+    z-index: 9999;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.debug-danger-btn:hover {
+    background: #ff4444; /* Fica visível e vermelho apenas no hover */
+    color: white;
+    opacity: 1;
+}
     </style>
 </head>
 <body>
@@ -113,5 +137,8 @@
        
     </div>
 </div>
+<button class="debug-danger-btn" onclick="limparTodosConvidados()" title="Debug: Limpar Base">
+    🗑️
+</button>
 </body>
 </html>
