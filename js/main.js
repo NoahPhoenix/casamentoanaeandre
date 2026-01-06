@@ -1,4 +1,3 @@
-console.log("Script main.js carregado com sucesso!");
 // --- 1. CONFIGURAÇÃO FIREBASE ---
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -73,15 +72,25 @@ function gerenciarConfirmacao() {
 atualizarTimer();
 gerenciarConfirmacao();
 
-document.getElementById('mainContainer').addEventListener('click', function() {
-    if (!this.classList.contains('open')) {
-        confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, zIndex: 1000 });
-        this.classList.add('open');
-    }
-});
+const mainContainer = document.getElementById('mainContainer');
+if (mainContainer) {
+    mainContainer.addEventListener('click', function() {
+        if (!this.classList.contains('open')) {
+            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, zIndex: 1000 });
+            this.classList.add('open');
+        }
+    });
+}
 
-document.getElementById('debugResetBtn').onclick = (e) => {
-    e.stopPropagation();
-    if(convidadoId) database.ref(`wedding/convidados/${convidadoId}`).update({status: 'nao_enviado'});
-    location.reload();
-};
+const resetBtn = document.getElementById('debugResetBtn');
+if (resetBtn) {
+    resetBtn.onclick = (e) => {
+        e.stopPropagation();
+        if(convidadoId) {
+            database.ref(`wedding/convidados/${convidadoId}`).update({status: 'nao_enviado'})
+                .then(() => location.reload());
+        } else {
+            location.reload();
+        }
+    };
+}
