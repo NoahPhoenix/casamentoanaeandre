@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
     script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://www.gstatic.com https://cdn.jsdelivr.net https://*.firebaseio.com; 
     script-src-elem 'self' 'unsafe-inline' https://www.gstatic.com https://cdn.jsdelivr.net https://*.firebaseio.com;
     connect-src 'self' https://*.firebaseio.com wss://*.firebaseio.com https://www.gstatic.com; 
@@ -13,56 +14,77 @@
     frame-src 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Convite André & Ana</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital@0;1&family=Montserrat:wght@300&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital@0;1&family=Montserrat:wght@300&display=swap"
+        rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script type="module" src="/js/main.js"></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
     <div class="envelope-wrapper" id="mainContainer">
         <div class="envelope"></div>
         <div class="flap"></div>
         <div class="pocket"></div>
-        
-        <div class="card">
-     <header class="card-header">
-    <div class="header-content">
-        <span class="header-names">A & A</span>
-        <div class="header-links">
-            <a href="#topo" class="nav-link">Início</a> <span class="separator">|</span>
-            <a href="#lista-presentes" class="nav-link">Presentes</a>
-        </div>
-    </div>
-</header>
 
-<div class="card-content" id="topo"> 
-    <div class="flower-icon">✿</div>
-    <h2 class="label">Reserve esta data</h2>
+        <div class="card">
+            <header class="card-header">
+                <div class="header-content">
+                    <span class="header-names">A & A</span>
+                    <div class="header-links">
+                        <a href="#topo" class="nav-link">Início</a>
+                        <span class="separator">|</span>
+                        <a href="javascript:void(0)" id="navInfo" class="nav-link" style="display: none;">Informações</a>
+                        <span id="sepInfo" class="separator" style="display: none;">|</span>
+                        <a href="#lista-presentes" class="nav-link">Presentes</a>
+                    </div>
+                </div>
+            </header>
+
+            <div class="card-content" id="topo">
+                <div class="flower-icon">✿</div>
+                <h2 class="label">Reserve esta data</h2>
                 <h1 class="title">Para Sempre & Sempre</h1>
-                
+
                 <div class="names">André <br> & <br> Ana</div>
-                
-                <div class="details">
+
+                <div id="guestWelcome"
+                        style="display: none; font-family: 'Playfair Display', serif; font-weight: bold; font-size: 2.5vh; color: var(--primary); margin-bottom: 1vh;">
+                        Olá, <span id="guestNameDisplay"></span>, Você está convidado(a) para o nosso casamento!
+                    </div>
+                <div id="detalhes-evento" class="details">
+                    
                     <div class="date">Sábado, 11 de Julho de 2026</div>
                     <div class="time">às 16:00 horas</div>
                     <div class="location">
-                        <strong>Espaço Grand Willow</strong><br>
-                        Rua das Flores, 123
+                        <div id="locationInfo" style="display: none;">
+                            <strong>Espaço Grand Willow</strong><br>
+                            Rua das Flores, 123
+                        </div>
                     </div>
+
+
                 </div>
 
                 <div class="intro-box">
                     <div class="love-story">
                         <h3 class="story-title">A nossa história de amor 💛</h3>
-                        <p><strong>Anninha</strong> (ou Nina, Na, Nalu...) conheceu <strong>André</strong> (ou Andrézinho, Dé…) em um belo dia — e, desde então, a história só foi ficando melhor.</p>
-                        <p>Tudo começou com ofertas de estágio, abraços nas escadas, status estratégicos no WhatsApp e <strong>11 pedidos de namoro</strong> (sim, onze!). Virou parceria daquelas boas, tanto que o pedido de sociedade veio uma semana antes do casamento.</p>
-                        <p>Se você recebeu este convite, é porque faz parte da nossa história. O presente mais desejado é a sua presença — mas, para quem insiste, deixamos uma lista aqui no site 😉</p>
+                        <p><strong>Anninha</strong> (ou Nina, Na, Nalu...) conheceu <strong>André</strong> (ou
+                            Andrézinho, Dé…) em um belo dia — e, desde então, a história só foi ficando melhor.</p>
+                        <p>Tudo começou com ofertas de estágio, abraços nas escadas, status estratégicos no WhatsApp e
+                            <strong>11 pedidos de namoro</strong> (sim, onze!). Virou parceria daquelas boas, tanto que
+                            o pedido de sociedade veio uma semana antes do casamento.
+                        </p>
+                        <p>Se você recebeu este convite, é porque faz parte da nossa história. O presente mais desejado
+                            é a sua presença — mas, para quem insiste, deixamos uma lista aqui no site 😉</p>
                         <div class="gentle-reminder">
                             <p><strong>Avisos com carinho:</strong><br>
-                            Presença confirmada, pontualidade, sem convidados extras e celulares guardados durante as fotos, combinado?<br>
-                            😄 Prometemos que é para garantir que tudo saia lindo!</p>
+                                Presença confirmada, pontualidade, sem convidados extras e celulares guardados durante
+                                as fotos, combinado?<br>
+                                😄 Prometemos que é para garantir que tudo saia lindo!</p>
                         </div>
                         <p class="final-invite">Estamos ansiosos para celebrar com você! 🥂💍</p>
                     </div>
@@ -84,58 +106,85 @@
                     </div>
                 </div>
 
-     
-                 <div id="lista-presentes" class="gifts-container">
-    <h2 class="label">Lista de Presentes</h2>
-    
-    <div class="gifts-grid">
-        <div class="gift-card">
-            <div class="gift-image-container">
-                <img src="caminho/da/sua/imagem1.jpg" alt="7 diárias no hotel" class="gift-img">
-            </div>
-            <h3 class="gift-title">7 diárias no hotel</h3>
-            <p class="gift-price">R$ 2.922,03</p>
-            <button class="btn-gift">Presentear</button>
-        </div>
 
-        <div class="gift-card">
-            <div class="gift-image-container">
-                <img src="caminho/da/sua/imagem2.jpg" alt="Jantar Especial" class="gift-img">
-            </div>
-            <h3 class="gift-title">Almoço especial no campo</h3>
-            <p class="gift-price">R$ 337,66</p>
-            <button class="btn-gift">Presentear</button>
-        </div>
+                <div id="lista-presentes" class="gifts-container">
+                    <h2 class="label">Lista de Presentes</h2>
 
-        <div class="gift-card">
-    <div class="gift-image-container">
-        <img src="images/carro.avif" alt="Aluguel de carro de luxo" class="gift-img">
-    </div>
-    <h3 class="gift-title">Aluguel de carro de luxo</h3>
-    <p class="gift-price">R$ 2.230,51</p>
-    <button class="btn-gift">Presentear</button>
-</div>
+                    <div class="gifts-grid">
+                        <div class="gift-card">
+                            <div class="gift-image-container">
+                                <img src="caminho/da/sua/imagem1.jpg" alt="7 diárias no hotel" class="gift-img">
+                            </div>
+                            <h3 class="gift-title">7 diárias no hotel</h3>
+                            <p class="gift-price">R$ 2.922,03</p>
+                            <button class="btn-gift">Presentear</button>
+                        </div>
 
-        <div class="gift-card">
-            <div class="gift-image-container">
-                <img src="caminho/da/sua/imagem4.jpg" alt="Bicicletas" class="gift-img">
-            </div>
-            <h3 class="gift-title">Alugar bicicletas</h3>
-            <p class="gift-price">R$ 143,50</p>
-            <button class="btn-gift">Presentear</button>
-        </div>
-    </div>
-</div>
-           <div style=" padding-bottom: 4vh; width: 100%;">
+                        <div class="gift-card">
+                            <div class="gift-image-container">
+                                <img src="caminho/da/sua/imagem2.jpg" alt="Jantar Especial" class="gift-img">
+                            </div>
+                            <h3 class="gift-title">Almoço especial no campo</h3>
+                            <p class="gift-price">R$ 337,66</p>
+                            <button class="btn-gift">Presentear</button>
+                        </div>
+
+                        <div class="gift-card">
+                            <div class="gift-image-container">
+                                <img src="images/carro.avif" alt="Aluguel de carro de luxo" class="gift-img">
+                            </div>
+                            <h3 class="gift-title">Aluguel de carro de luxo</h3>
+                            <p class="gift-price">R$ 2.230,51</p>
+                            <button class="btn-gift">Presentear</button>
+                        </div>
+
+                        <div class="gift-card">
+                            <div class="gift-image-container">
+                                <img src="caminho/da/sua/imagem4.jpg" alt="Bicicletas" class="gift-img">
+                            </div>
+                            <h3 class="gift-title">Alugar bicicletas</h3>
+                            <p class="gift-price">R$ 143,50</p>
+                            <button class="btn-gift">Presentear</button>
+                        </div>
+                    </div>
+                </div>
+                <div style=" padding-bottom: 4vh; width: 100%;">
                 </div>
             </div>
         </div>
-		
+
 
         <div class="hint">Clique para abrir</div>
     </div>
 
     <button class="debug-reset" id="debugResetBtn">RESET</button>
 
+<div id="infoModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <button class="close-modal" id="closeModal">&times;</button>
+        <div class="flower-icon">✿</div>
+        <h2 class="story-title">Detalhes do Evento</h2>
+        
+        <div class="modal-details">
+            <div class="modal-item">
+                <strong>📅 DATA</strong>
+                <p>Sábado, 11 de Julho de 2026</p>
+            </div>
+            <div class="modal-item">
+                <strong>⏰ HORA</strong>
+                <p>às 16:00 horas</p>
+            </div>
+            <div class="modal-item">
+                <strong>📍 LOCAL</strong>
+                <p>Espaço Grand Willow<br>
+                Rua das Flores, 123</p>
+            </div>
+        </div>
+        
+        <a href="https://maps.google.com" target="_blank" class="btn-maps">Ver no Google Maps</a>
+    </div>
+</div>
+
 </body>
+
 </html>

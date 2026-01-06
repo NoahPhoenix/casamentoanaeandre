@@ -290,3 +290,55 @@ body, html {
 
 .debug-reset { position: fixed; bottom: 10px; right: 10px; font-size: 8px; opacity: 0.3; background: #333 !important; color: #fff !important; border: none; padding: 4px; border-radius: 3px; z-index: 9999; }
 .hint { position: absolute; bottom: -40px; width: 100%; text-align: center; color: var(--primary) !important; font-weight: bold; font-size: 14px; }
+
+/* Modal Estilizada */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: flex; justify-content: center; align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px; right: 20px;
+    background: none; border: none;
+    font-size: 28px; color: #888;
+    cursor: pointer;
+}
+
+.modal-item { margin-bottom: 20px; }
+.modal-item strong { color: var(--accent); font-size: 1.2vh; letter-spacing: 1px; }
+.modal-item p { margin: 5px 0; color: #444; font-weight: 500; }
+
+.btn-maps {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
