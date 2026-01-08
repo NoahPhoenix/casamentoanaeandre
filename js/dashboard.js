@@ -16,14 +16,14 @@ export function inicializarDashboard(convidadosRef) {
         }
     };
 
-   const inputs = [document.getElementById('loginUser'), document.getElementById('loginPass')];
-inputs.forEach(input => {
-    input.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            window.verificarAcesso();
-        }
+    const inputs = [document.getElementById('loginUser'), document.getElementById('loginPass')];
+    inputs.forEach(input => {
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                window.verificarAcesso();
+            }
+        });
     });
-});
 
     window.limparTodosConvidados = () => {
         // Primeira confirmação
@@ -206,4 +206,38 @@ inputs.forEach(input => {
         dadosLocais = snap.val() || {};
         renderizarTabela();
     });
+
+   // --- FUNÇÃO PARA EXPORTAR PLANILHA ---
+window.gerarPlanilha = () => {
+    if (!dadosLocais || Object.keys(dadosLocais).length === 0) {
+        return alert("Não há dados para exportar.");
+    }
+
+    // Cabeçalho do arquivo CSV (com \ufeff para o Excel entender os acentos)
+    let csv = '\ufeffNome,E-mail,WhatsApp,Status\n';
+
+    // Percorre os dados locais e monta as linhas
+    Object.values(dadosLocais).forEach(c => {
+        const nome = c.nome || '-';
+        const email = c.email || '-';
+        const whats = c.whatsapp || '-';
+        const status = c.status === 'confirmado' ? 'Confirmado' : (c.status === 'enviado' ? 'Enviado' : 'Pendente');
+        
+        csv += `"${nome}","${email}","${whats}","${status}"\n`;
+    });
+
+    // Cria o link invisível para download
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `lista_convidados_${new Date().toLocaleDateString().replace(/\//g, '-')}.csv`;
+    link.click();
+};
+
+// Vincula o clique do botão ID btnExportar à função acima
+const btnExportar = document.getElementById('btnExportar');
+if (btnExportar) {
+    btnExportar.onclick = () => window.gerarPlanilha();
+}
+
 }
