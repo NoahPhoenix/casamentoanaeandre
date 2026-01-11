@@ -27,40 +27,40 @@ if (document.getElementById('listaConvidados')) {
 const mainContainer = document.getElementById('mainContainer');
 if (mainContainer) {
 
-// Função para garantir que os botões obedeçam ao ID, sem bugar o layout
-function validarBotoesPresente() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const idAtual = urlParams.get('id');
-    
-    const giftCards = document.querySelectorAll('.gift-card');
+    // Função para garantir que os botões obedeçam ao ID, sem bugar o layout
+    function validarBotoesPresente() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const idAtual = urlParams.get('id');
 
-    giftCards.forEach(card => {
-        const btn = card.querySelector('.btn-gift');
-        const giftName = btn ? btn.getAttribute('data-gift') : "Presente";
+        const giftCards = document.querySelectorAll('.gift-card');
 
-        if (idAtual) {
-            // COM ID: Ativa o card e mostra o botão
-            card.style.cursor = 'pointer';
-            if (btn) btn.style.display = 'block';
+        giftCards.forEach(card => {
+            const btn = card.querySelector('.btn-gift');
+            const giftName = btn ? btn.getAttribute('data-gift') : "Presente";
 
-            card.onclick = (e) => {
-                e.stopPropagation();
-                openGiftModal(giftName);
-            };
-        } else {
-            // SEM ID: Card visível, mas sem clique e botão escondido
-            card.style.cursor = 'default';
-            card.onclick = null; // Remove o evento de clique
-            if (btn) btn.style.display = 'none';
-        }
-    });
-}
-// Chame a função IMEDIATAMENTE e também após o carregamento do DOM
-validarBotoesPresente();
-document.addEventListener('DOMContentLoaded', validarBotoesPresente);
+            if (idAtual) {
+                // COM ID: Ativa o card e mostra o botão
+                card.style.cursor = 'pointer';
+                if (btn) btn.style.display = 'block';
+
+                card.onclick = (e) => {
+                    e.stopPropagation();
+                    openGiftModal(giftName);
+                };
+            } else {
+                // SEM ID: Card visível, mas sem clique e botão escondido
+                card.style.cursor = 'default';
+                card.onclick = null; // Remove o evento de clique
+                if (btn) btn.style.display = 'none';
+            }
+        });
+    }
+    // Chame a função IMEDIATAMENTE e também após o carregamento do DOM
+    validarBotoesPresente();
+    document.addEventListener('DOMContentLoaded', validarBotoesPresente);
     // Dentro da verificação do mainContainer no main.js
-    
-    
+
+
     const navInfo = document.getElementById('navInfo');
     const infoModal = document.getElementById('infoModal');
     const closeModal = document.getElementById('closeModal');
@@ -183,30 +183,30 @@ document.addEventListener('DOMContentLoaded', validarBotoesPresente);
     }
 
     // Ajuste no clique do envelope para não bugar o texto "Clique para abrir"
-if (mainContainer) {
-    mainContainer.addEventListener('click', function (e) {
-        // Se clicou no botão de presente, não faz nada com o envelope
-        if (e.target.classList.contains('btn-gift')) return;
+    if (mainContainer) {
+        mainContainer.addEventListener('click', function (e) {
+            // Se clicou no botão de presente, não faz nada com o envelope
+            if (e.target.classList.contains('btn-gift')) return;
 
-        if (!this.classList.contains('open')) {
-            try {
-                confetti({
-                    particleCount: 150,
-                    spread: 100,
-                    origin: { y: 0.6 },
-                    zIndex: 2000 
-                });
-            } catch (err) {
-                console.error("Erro no confete:", err);
+            if (!this.classList.contains('open')) {
+                try {
+                    confetti({
+                        particleCount: 150,
+                        spread: 100,
+                        origin: { y: 0.6 },
+                        zIndex: 2000
+                    });
+                } catch (err) {
+                    console.error("Erro no confete:", err);
+                }
+                this.classList.add('open');
+
+                // Garante que o texto da dica suma apenas DEPOIS de abrir
+                const hint = this.querySelector('.hint');
+                if (hint) hint.style.opacity = '0';
             }
-            this.classList.add('open');
-            
-            // Garante que o texto da dica suma apenas DEPOIS de abrir
-            const hint = this.querySelector('.hint');
-            if (hint) hint.style.opacity = '0';
-        }
-    });
-}
+        });
+    }
 
     // --- Lógica de Paginação Atualizada ---
     const gifts = document.querySelectorAll('.gift-card');
@@ -244,7 +244,7 @@ if (mainContainer) {
             }
         });
 
-        
+
 
         // Atualiza visual das bolinhas
         const dots = document.querySelectorAll('.dot');
@@ -269,35 +269,35 @@ if (mainContainer) {
     let currentGiftName = "";
 
     // Defina estas funções fora de qualquer listener para serem globais
-let selectedGift = "";
+    let selectedGift = "";
 
-function openGiftModal(giftName) {
-    selectedGift = giftName;
-    const modal = document.getElementById('gift-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        console.log("Abrindo modal para: " + giftName);
+    function openGiftModal(giftName) {
+        selectedGift = giftName;
+        const modal = document.getElementById('gift-modal');
+        if (modal) {
+            modal.style.display = 'flex';
+            console.log("Abrindo modal para: " + giftName);
+        }
     }
-}
 
-function closeGiftModal() {
-    const modal = document.getElementById('gift-modal');
-    if (modal) {
-        modal.style.display = 'none';
-        document.getElementById('gift-comment').value = '';
+    function closeGiftModal() {
+        const modal = document.getElementById('gift-modal');
+        if (modal) {
+            modal.style.display = 'none';
+            document.getElementById('gift-comment').value = '';
+        }
     }
-}
 
-// Vincule o botão de fechar (X) e o de confirmar
-document.getElementById('close-gift-modal').onclick = closeGiftModal;
-document.getElementById('confirm-gift-btn').onclick = async () => {
-    const comment = document.getElementById('gift-comment').value.trim();
-    if (!comment) {
-        alert("Por favor, deixe uma mensagem para o casal!");
-        return;
-    }
-    await saveGiftComment(selectedGift, comment);
-};
+    // Vincule o botão de fechar (X) e o de confirmar
+    document.getElementById('close-gift-modal').onclick = closeGiftModal;
+    document.getElementById('confirm-gift-btn').onclick = async () => {
+        const comment = document.getElementById('gift-comment').value.trim();
+        if (!comment) {
+            alert("Por favor, deixe uma mensagem para o casal!");
+            return;
+        }
+        await saveGiftComment(selectedGift, comment);
+    };
 
     document.addEventListener('DOMContentLoaded', () => {
         const giftModal = document.getElementById('gift-modal');
@@ -355,12 +355,12 @@ document.getElementById('confirm-gift-btn').onclick = async () => {
                 const valorPresente = btnClicado ? btnClicado.getAttribute('data-price') : "Valor não informado";
 
                 const novoPresente = {
-                    quem_comprou: nomeDoador,
-                    convidado_id: convidadoId || 'id_nao_encontrado',
-                    o_que_comprou: gift,
+                    name: nomeDoador,        // Antes era quem_comprou
+                    text: message,           // Antes era mensagem
+                    giftItem: gift,          // Guardando o nome do presente
                     valor: valorPresente,
-                    mensagem: message,
-                    data: new Date().toLocaleString('pt-BR')
+                    date: new Date().toLocaleString('pt-BR'),
+                    timestamp: Date.now()    // Adicionado para ordenação
                 };
 
                 // 4. Salva no Firebase
@@ -378,24 +378,24 @@ document.getElementById('confirm-gift-btn').onclick = async () => {
             }
         }
         const commentsRef = database.ref('wedding/comments');
-let allComments = [];
-let currentCommentPage = 1;
-const commentsPerPage = 4;
+        let allComments = [];
+        let currentCommentPage = 1;
+        const commentsPerPage = 4;
 
-// 1. Escutar novos comentários do Firebase
-commentsRef.on('value', (snapshot) => {
-    const data = snapshot.val();
-    allComments = [];
-    
-    if (data) {
-        // Converte o objeto do Firebase em um array e inverte para ver os mais recentes primeiro
-        allComments = Object.values(data).reverse();
-    }
-    renderComments();
-});
+        // 1. Escutar novos comentários do Firebase
+        commentsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            allComments = [];
 
-// 2. Função para renderizar os comentários na página atual
-function renderComments() {
+            if (data) {
+                // Converte o objeto do Firebase em um array e inverte para ver os mais recentes primeiro
+                allComments = Object.values(data).reverse();
+            }
+            renderComments();
+        });
+
+        // 2. Função para renderizar os comentários na página atual
+        function renderComments() {
     const container = document.getElementById('commentsList');
     const indicator = document.getElementById('commentPageIndicator');
     container.innerHTML = '';
@@ -410,35 +410,41 @@ function renderComments() {
         paginatedComments.forEach(msg => {
             const div = document.createElement('div');
             div.className = 'comment-card';
+            // Agora usamos msg.name e msg.text que definimos no passo anterior
             div.innerHTML = `
-                <strong>${msg.name}</strong>
-                <p>${msg.text}</p>
+                <div style="border-bottom: 1px solid #eee; margin-bottom: 5px; padding-bottom: 5px;">
+                    <strong style="color: var(--primary);">${msg.name}</strong>
+                    <small style="display: block; color: #666; font-size: 0.8em;">Presenteou com: ${msg.giftItem || 'Presente'}</small>
+                </div>
+                <p style="font-style: italic;">"${msg.text}"</p>
             `;
             container.appendChild(div);
         });
     }
 
-    indicator.innerText = `Página ${currentCommentPage}`;
-    
-    // Desabilitar botões se não houver mais páginas
-    document.getElementById('prevComments').disabled = (currentCommentPage === 1);
-    document.getElementById('nextComments').disabled = (endIndex >= allComments.length);
+    if (indicator) indicator.innerText = `Página ${currentCommentPage}`;
+
+    // Atualiza botões
+    const btnPrev = document.getElementById('prevComments');
+    const btnNext = document.getElementById('nextComments');
+    if (btnPrev) btnPrev.disabled = (currentCommentPage === 1);
+    if (btnNext) btnNext.disabled = (endIndex >= allComments.length);
 }
 
-// 3. Eventos dos botões de navegação
-document.getElementById('prevComments').addEventListener('click', () => {
-    if (currentCommentPage > 1) {
-        currentCommentPage--;
-        renderComments();
-    }
-});
+        // 3. Eventos dos botões de navegação
+        document.getElementById('prevComments').addEventListener('click', () => {
+            if (currentCommentPage > 1) {
+                currentCommentPage--;
+                renderComments();
+            }
+        });
 
-document.getElementById('nextComments').addEventListener('click', () => {
-    if ((currentCommentPage * commentsPerPage) < allComments.length) {
-        currentCommentPage++;
-        renderComments();
-    }
-});
+        document.getElementById('nextComments').addEventListener('click', () => {
+            if ((currentCommentPage * commentsPerPage) < allComments.length) {
+                currentCommentPage++;
+                renderComments();
+            }
+        });
     });
 
 
