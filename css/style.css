@@ -175,9 +175,22 @@ body, html {
     line-height: 1; margin-bottom: 5px;
 }
 
-.confirmation-area { width: 100%; margin-top: 1vh; min-height: 8vh; display: flex; align-items: center; justify-content: center; }
-
-.confirmed-msg { text-align: center; margin: 20px 0; padding: 0 20px; }
+/* Localize e substitua a classe .confirmation-area no seu style.css */
+.confirmation-area { 
+    width: 100%; 
+    margin-top: 1vh; 
+    min-height: 8vh; 
+    display: flex; 
+    flex-direction: column; /* Garante o empilhamento vertical */
+    align-items: center; 
+    justify-content: center;
+    gap: 15px; /* Cria um espaço elegante entre a contagem e o botão */
+}
+.confirmed-msg {
+    text-align: center;
+    margin: 10px 0; /* Ajuste o margin para não ficar muito longe */
+    padding: 0 20px;
+}
 .confirmed-msg span { font-size: 42px; color: var(--accent) !important; font-family: 'Playfair Display', serif; font-weight: bold; display: block; }
 .confirmed-msg p { font-size: 16px; color: #666 !important; margin: 5px 0; font-weight: 500; }
 
@@ -251,12 +264,14 @@ body, html {
 }
 
 .btn-gift {
-    margin-top: 10px; 
     width: 100%; padding: 12px;
     background-color: var(--accent) !important;
     color: white !important; border: none; border-radius: 6px;
     font-size: 1.4vh; font-weight: bold; text-transform: uppercase;
     cursor: pointer;
+    display: none; /* Esconde o botão por padrão, o JS mostrará se tiver ID */
+    pointer-events: none; /* Mantém o clique atravessando para o card */
+    margin-top: auto;
 }
 
 .btn-gift:hover { opacity: 0.9; }
@@ -270,10 +285,43 @@ body, html {
     z-index: 2000; display: flex; justify-content: center; align-items: center;
 }
 
+/* Container must be relative for absolute positioning of the button */
 .modal-content {
-    background: white; padding: 40px 30px; border-radius: 20px;
-    width: 90%; max-width: 400px; position: relative; text-align: center;
+    background: white;
+    padding: 40px 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    position: relative; /* Essential */
+    text-align: center;
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+/* Modern Close Button */
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 32px;
+    height: 32px;
+    background: #f0f0f0 !important;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #888;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    line-height: 1;
+    padding: 0;
+}
+
+.close-modal:hover {
+    background: #e0d5d5 !important;
+    color: var(--primary);
+    transform: rotate(90deg);
 }
 
 #gift-comment {
@@ -328,3 +376,50 @@ body, html {
     position: absolute; bottom: -40px; width: 100%; text-align: center; 
     color: var(--primary) !important; font-weight: bold; font-size: 14px; 
 }
+
+
+/* Estilo do Modal (Garante o botão de fechar à direita) */
+.modal-content {
+    position: relative;
+    padding-top: 50px; /* Espaço para o botão X */
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: 0.3s;
+}
+
+.close-modal:hover {
+    background: #e0e0e0;
+    transform: rotate(90deg);
+}
+
+/* Estilo para o Card clicável */
+.gift-card {
+    cursor: default;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efeito de hover no card inteiro */
+.gift-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border-color: var(--accent); /* Dá um destaque com a cor dourada/accent */
+}
+
