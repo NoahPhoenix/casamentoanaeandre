@@ -288,17 +288,6 @@ if (mainContainer) {
         }
     }
 
-    // Vincule o botão de fechar (X) e o de confirmar
-    document.getElementById('close-gift-modal').onclick = closeGiftModal;
-    document.getElementById('confirm-gift-btn').onclick = async () => {
-        const comment = document.getElementById('gift-comment').value.trim();
-        if (!comment) {
-            alert("Por favor, deixe uma mensagem para o casal!");
-            return;
-        }
-        await saveGiftComment(selectedGift, comment);
-    };
-
     document.addEventListener('DOMContentLoaded', () => {
         const giftModal = document.getElementById('gift-modal');
         const commentInput = document.getElementById('gift-comment');
@@ -341,58 +330,37 @@ if (mainContainer) {
         }
 
         async function saveGiftComment(gift, message) {
-            try {
-                // 1. Pegamos a referência para uma nova tabela chamada 'presentes_recebidos'
-                const presentesRef = database.ref('wedding/presentes_recebidos');
-
-                // 2. Capturamos os dados do convidado que já estão no seu script
-                // Se convidadoId não existir, salvamos como "Convidado Anônimo"
-                const nomeDoador = (typeof dados !== 'undefined' && dados.nome) ? dados.nome : "Convidado via Link";
-
-                // 3. Pegamos o valor do atributo 'data-price' do botão (se você adicionou ao HTML)
-                // Ou você pode passar o valor fixo se preferir
-                const btnClicado = document.querySelector(`[data-gift="${gift}"]`);
-                const valorPresente = btnClicado ? btnClicado.getAttribute('data-price') : "Valor não informado";
-
-                const novoPresente = {
-                    name: nomeDoador,        // Antes era quem_comprou
-                    text: message,           // Antes era mensagem
-                    giftItem: gift,          // Guardando o nome do presente
-                    valor: valorPresente,
-                    date: new Date().toLocaleString('pt-BR'),
-                    timestamp: Date.now()    // Adicionado para ordenação
-                };
-
-                // 4. Salva no Firebase
-                await presentesRef.push(novoPresente);
-
-                alert("Mensagem salva com sucesso! Agora você será redirecionado para o PIX.");
-                closeModal();
-
-                // Opcional: Abrir o link do PIX após salvar
-                // window.open('SUA_URL_DO_PIX_AQUI', '_blank');
-
-            } catch (error) {
-                console.error("Erro ao salvar no Firebase:", error);
-                alert("Erro ao salvar mensagem. Por favor, tente novamente.");
-            }
-        }
+    try {
+        // AJUSTE 1: Salvar na mesma pasta que a lista de comentários lê
         const commentsRef = database.ref('wedding/comments');
-        let allComments = [];
-        let currentCommentPage = 1;
-        const commentsPerPage = 4;
 
-        // 1. Escutar novos comentários do Firebase
-        commentsRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            allComments = [];
+        // AJUSTE 2: Pegar o nome que está aparecendo na tela para o convidado
+        const nomeNaTela = document.getElementById('guestNameDisplay') ? document.getElementById('guestNameDisplay').innerText : "Convidado";
 
-            if (data) {
-                // Converte o objeto do Firebase em um array e inverte para ver os mais recentes primeiro
-                allComments = Object.values(data).reverse();
-            }
-            renderComments();
-        });
+        const btnClicado = document.querySelector(`[data-gift="${gift}"]`);
+        const valorPresente = btnClicado ? btnClicado.getAttribute('data-price') : "Valor não informado";
+
+        const novoComentario = {
+            name: nomeNaTela,        
+            text: message,           
+            giftItem: gift,          
+            valor: valorPresente,
+            date: new Date().toLocaleString('pt-BR'),
+            timestamp: Date.now()    
+        };
+
+        console.log("Salvando objeto:", novoComentario); // Para você conferir no F12
+
+        await commentsRef.push(novoComentario);
+
+        alert("Mensagem salva com sucesso!");
+        closeModal();
+
+    } catch (error) {
+        console.error("Erro ao salvar no Firebase:", error);
+        alert("Erro ao salvar mensagem.");
+    }
+}
 
         // 2. Função para renderizar os comentários na página atual
         function renderComments() {
