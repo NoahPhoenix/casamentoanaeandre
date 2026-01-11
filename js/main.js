@@ -27,6 +27,30 @@ if (document.getElementById('listaConvidados')) {
 const mainContainer = document.getElementById('mainContainer');
 if (mainContainer) {
 
+    document.addEventListener("DOMContentLoaded", function() {
+    // 1. Verificação: Altere 'idDoConvidado' para a variável que você usa para validar o acesso
+    // Exemplo: const guestId = localStorage.getItem('guestId'); ou sua variável 'dados.id'
+    const guestId = (typeof dados !== 'undefined' && dados.id) ? dados.id : null;
+
+    // 2. Seleciona todos os botões de presente
+    const giftButtons = document.querySelectorAll('.btn-gift');
+
+    if (!guestId) {
+        // Se NÃO houver ID, esconde todos os botões
+        giftButtons.forEach(button => {
+            button.style.display = 'none'; 
+        });
+        
+        // Opcional: Avisar ao usuário por que os botões sumiram
+        console.log("Acesso como visitante: Botões de presente ocultos.");
+    } else {
+        // Se houver ID, garante que eles apareçam
+        giftButtons.forEach(button => {
+            button.style.display = 'block';
+        });
+    }
+});
+
     // Dentro da verificação do mainContainer no main.js
 
     const navInfo = document.getElementById('navInfo');
@@ -290,26 +314,43 @@ document.addEventListener('DOMContentLoaded', () => {
         commentInput.value = '';
     }
 
-    async function saveGiftComment(gift, message) {
-        try {
-            // Aqui simulamos o salvamento no banco de dados (Firebase/Supabase)
-            console.log("Enviando para o banco:", { gift, message, timestamp: new Date() });
+  async function saveGiftComment(gift, message) {
+    try {
+        // 1. Pegamos a referência para uma nova tabela chamada 'presentes_recebidos'
+        const presentesRef = database.ref('wedding/presentes_recebidos');
+        
+        // 2. Capturamos os dados do convidado que já estão no seu script
+        // Se convidadoId não existir, salvamos como "Convidado Anônimo"
+        const nomeDoador = (typeof dados !== 'undefined' && dados.nome) ? dados.nome : "Convidado via Link";
+        
+        // 3. Pegamos o valor do atributo 'data-price' do botão (se você adicionou ao HTML)
+        // Ou você pode passar o valor fixo se preferir
+        const btnClicado = document.querySelector(`[data-gift="${gift}"]`);
+        const valorPresente = btnClicado ? btnClicado.getAttribute('data-price') : "Valor não informado";
 
-            /* Exemplo Firebase:
-            await db.collection('gift_messages').add({
-                giftName: gift,
-                message: message,
-                date: new Date()
-            });
-            */
+        const novoPresente = {
+            quem_comprou: nomeDoador,
+            convidado_id: convidadoId || 'id_nao_encontrado',
+            o_que_comprou: gift,
+            valor: valorPresente,
+            mensagem: message,
+            data: new Date().toLocaleString('pt-BR')
+        };
 
-            alert("Mensagem salva com sucesso! Agora você pode realizar o PIX.");
-            closeModal();
-        } catch (error) {
-            console.error("Erro ao salvar:", error);
-            alert("Erro ao salvar mensagem.");
-        }
+        // 4. Salva no Firebase
+        await presentesRef.push(novoPresente);
+
+        alert("Mensagem salva com sucesso! Agora você será redirecionado para o PIX.");
+        closeModal();
+        
+        // Opcional: Abrir o link do PIX após salvar
+        // window.open('SUA_URL_DO_PIX_AQUI', '_blank');
+
+    } catch (error) {
+        console.error("Erro ao salvar no Firebase:", error);
+        alert("Erro ao salvar mensagem. Por favor, tente novamente.");
     }
+}
 });
 
 

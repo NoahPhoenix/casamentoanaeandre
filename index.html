@@ -20,7 +20,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script type="module" src="/js/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@pqina/flip/dist/flip.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -110,214 +109,208 @@
 
 
                 <div id="lista-presentes" class="gifts-container">
-                    <h2 class="label">Lista de Presentes</h2>
+    <h2 class="label">Lista de Presentes</h2>
 
-                    <div class="gifts-grid">
-                        <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/barco.jpeg" alt="Passeio de Barco" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Passeio de Barco</h3>
-                            <p class="gift-price">R$ 500</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
+    <div class="gifts-grid">
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/barco.jpeg" alt="Passeio de Barco" class="gift-img">
+            </div>
+            <h3 class="gift-title">Passeio de Barco</h3>
+            <p class="gift-price">R$ 500</p>
+            <button class="btn-gift" data-gift="Passeio de Barco" data-price="R$ 500">Presentear</button>
+        </div>
 
-                        <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/trilha .jpeg" alt="Trilha para o fim do mundo" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Trilha para o fim do mundo</h3>
-                            <p class="gift-price">R$ 200</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/trilha .jpeg" alt="Trilha para o fim do mundo" class="gift-img">
+            </div>
+            <h3 class="gift-title">Trilha para o fim do mundo</h3>
+            <p class="gift-price">R$ 200</p>
+            <button class="btn-gift" data-gift="Trilha para o fim do mundo" data-price="R$ 200">Presentear</button>
+        </div>
 
-                        <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/ski.jpeg" alt="Aula de ski para evitar braços e pernas quebradas " class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Aula de ski para evitar braços e pernas quebradas </h3>
-                            <p class="gift-price">R$ 420</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/ski.jpeg" alt="Aula de ski para evitar braços e pernas quebradas " class="gift-img">
+            </div>
+            <h3 class="gift-title">Aula de ski para evitar braços e pernas quebradas </h3>
+            <p class="gift-price">R$ 420</p>
+            <button class="btn-gift" data-gift="Aula de ski para evitar braços e pernas quebradas" data-price="R$ 420">Presentear</button>
+        </div>
 
-                        <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/Capacete .jpeg" alt="Capacete para as sogras não reclamarem " class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Capacete para as sogras não reclamarem </h3>
-                            <p class="gift-price">R$ 1,28</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
-                         <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/equip.jpeg" alt="Aluguel do equipamento de ski " class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Aluguel do equipamento de ski </h3>
-                            <p class="gift-price">R$ 125</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/Capacete .jpeg" alt="Capacete para as sogras não reclamarem " class="gift-img">
+            </div>
+            <h3 class="gift-title">Capacete para as sogras não reclamarem </h3>
+            <p class="gift-price">R$ 1,28</p>
+            <button class="btn-gift" data-gift="Capacete para as sogras não reclamarem" data-price="R$ 1,28">Presentear</button>
+        </div>
 
-                        <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/luva.jpeg" alt="Luvas para cair em paz" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Luvas para cair em paz</h3>
-                            <p class="gift-price">R$ 1,30</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/equip.jpeg" alt="Aluguel do equipamento de ski " class="gift-img">
+            </div>
+            <h3 class="gift-title">Aluguel do equipamento de ski </h3>
+            <p class="gift-price">R$ 125</p>
+            <button class="btn-gift" data-gift="Aluguel do equipamento de ski" data-price="R$ 125">Presentear</button>
+        </div>
 
-                        <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/oculos.jpeg" alt="Aluguel de óculos superfaturado" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Aluguel de óculos superfaturado</h3>
-                            <p class="gift-price">R$ 65</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/luva.jpeg" alt="Luvas para cair em paz" class="gift-img">
+            </div>
+            <h3 class="gift-title">Luvas para cair em paz</h3>
+            <p class="gift-price">R$ 1,30</p>
+            <button class="btn-gift" data-gift="Luvas para cair em paz" data-price="R$ 1,30">Presentear</button>
+        </div>
 
-                        <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/calça.jpeg" alt="Aluguel de roupa para esquiar, evitando mais roupa no guarda-roupa da noiva " class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Aluguel de roupa para esquiar, evitando mais roupa no guarda-roupa da noiva </h3>
-                            <p class="gift-price">R$ 2.000</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
-                        <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/jet.jpeg" alt="Garantir que a noiva vai pilotar a moto " class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Garantir que a NOIVA vai pilotar a moto </h3>
-                            <p class="gift-price">R$ 50</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/oculos.jpeg" alt="Aluguel de óculos superfaturado" class="gift-img">
+            </div>
+            <h3 class="gift-title">Aluguel de óculos superfaturado</h3>
+            <p class="gift-price">R$ 65</p>
+            <button class="btn-gift" data-gift="Aluguel de óculos superfaturado" data-price="R$ 65">Presentear</button>
+        </div>
 
-                        <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/jet.jpeg" alt="Garantir que o noivo vai pilotar a moto" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Garantir que o NOIVO vai pilotar a moto</h3>
-                            <p class="gift-price">R$ 5000</p>   
-                            <button class="btn-gift">Presentear</button>
-                        </div>
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/calça.jpeg" alt="Aluguel de roupa para esquiar" class="gift-img">
+            </div>
+            <h3 class="gift-title">Aluguel de roupa para esquiar</h3>
+            <p class="gift-price">R$ 2.000</p>
+            <button class="btn-gift" data-gift="Aluguel de roupa para esquiar" data-price="R$ 2.000">Presentear</button>
+        </div>
 
-                        <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/allegra.jpeg" alt="allegra para a noiva sobreviver aos cachorros" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Allegra para a noiva sobreviver aos cachorros</h3>
-                            <p class="gift-price">R$ 60</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/jet.jpeg" alt="Garantir que a noiva vai pilotar a moto " class="gift-img">
+            </div>
+            <h3 class="gift-title">Garantir que a NOIVA vai pilotar a moto </h3>
+            <p class="gift-price">R$ 50</p>
+            <button class="btn-gift" data-gift="Garantir que a NOIVA vai pilotar a moto" data-price="R$ 50">Presentear</button>
+        </div>
 
-                        <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/aviao.jpeg" alt="Passagem de avião" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Passagem de avião</h3>
-                            <p class="gift-price">R$ Passagem de avião</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
-                         <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/hotel .jpeg" alt="Uma diária no hotel estranhamente parecido como o do filme do iluminado" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Uma diária no hotel estranhamente parecido como o do filme do iluminado</h3>
-                            <p class="gift-price">R$ 1.000</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/jet.jpeg" alt="Garantir que o noivo vai pilotar a moto" class="gift-img">
+            </div>
+            <h3 class="gift-title">Garantir que o NOIVO vai pilotar a moto</h3>
+            <p class="gift-price">R$ 5000</p>   
+            <button class="btn-gift" data-gift="Garantir que o NOIVO vai pilotar a moto" data-price="R$ 5000">Presentear</button>
+        </div>
 
-                        <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/machado .jpeg" alt="Machado para quebrar a porta se efetivamente for o hotel do iluminado" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Machado para quebrar a porta se efetivamente for o hotel do iluminado</h3>
-                            <p class="gift-price">R$ 100</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/allegra.jpeg" alt="allegra para a noiva sobreviver aos cachorros" class="gift-img">
+            </div>
+            <h3 class="gift-title">Allegra para a noiva sobreviver aos cachorros</h3>
+            <p class="gift-price">R$ 60</p>
+            <button class="btn-gift" data-gift="Allegra para a noiva sobreviver aos cachorros" data-price="R$ 60">Presentear</button>
+        </div>
 
-                        <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/penetra.jpg" alt="Levar alguém que não foi convidado para o casamento" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Levar alguém que não foi convidado para o casamento </h3>
-                            <p class="gift-price">R$ 60.000,00</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/aviao.jpeg" alt="Passagem de avião" class="gift-img">
+            </div>
+            <h3 class="gift-title">Passagem de avião</h3>
+            <p class="gift-price">R$ Passagem de avião</p>
+            <button class="btn-gift" data-gift="Passagem de avião" data-price="Variável">Presentear</button>
+        </div>
 
-                        <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/branco.jpeg" alt="ir de branco" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Ir de branco</h3>
-                            <p class="gift-price">R$ 100.000,00</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
-                            <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/jantar .jpeg" alt="Primeiro jantar dor noivos" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Primeiro jantar dor noivos</h3>
-                            <p class="gift-price">R$ 150,00</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
-                          <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/photo.png" alt="Garantir que os noivos vão mandar fotos da viagem" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Garantir que os noivos vão mandar fotos da viagem</h3>
-                            <p class="gift-price">R$ 544,99</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
-                          <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/nophoto.png" alt="Garantir que os noivos não vão mandar foto da viagem" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Garantir que os noivos não vão mandar foto da viagem</h3>
-                            <p class="gift-price">R$ 0,01</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
-                          <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/carro.jpeg" alt="Aluguel do carro" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Aluguel do carro</h3>
-                            <p class="gift-price">R$ 150,00</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
-                        <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/guincho.jpeg" alt="Guincho para se o carro quebrar" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Guincho para se o carro quebrar</h3>
-                            <p class="gift-price">R$ 221,00</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
-                        <div class="gift-card">
-                            <div class="gift-image-container">
-                                <img src="images/vegano.jpeg" alt="Almoço especial Vegano" class="gift-img">
-                            </div>
-                            <h3 class="gift-title">Almoço especial Vegano</h3>
-                            <p class="gift-price">R$ 165,00</p>
-                            <button class="btn-gift">Presentear</button>
-                        </div>
-                    </div>
-                    <!-- <div class="pagination-wrapper">
-                        <button id="prevGift" class="pag-btn" aria-label="Anterior">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-                            </svg>
-                        </button>
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/hotel .jpeg" alt="Uma diária no hotel" class="gift-img">
+            </div>
+            <h3 class="gift-title">Uma diária no hotel</h3>
+            <p class="gift-price">R$ 1.000</p>
+            <button class="btn-gift" data-gift="Uma diária no hotel" data-price="R$ 1.000">Presentear</button>
+        </div>
 
-                        <div id="paginationDots" class="dots-container"></div>
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/machado .jpeg" alt="Machado para quebrar a porta" class="gift-img">
+            </div>
+            <h3 class="gift-title">Machado para quebrar a porta</h3>
+            <p class="gift-price">R$ 100</p>
+            <button class="btn-gift" data-gift="Machado para quebrar a porta" data-price="R$ 100">Presentear</button>
+        </div>
 
-                        <button id="nextGift" class="pag-btn" aria-label="Próximo">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-                            </svg>
-                        </button>
-                    </div> -->
-                </div>
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/penetra.jpg" alt="Levar alguém que não foi convidado" class="gift-img">
+            </div>
+            <h3 class="gift-title">Levar alguém que não foi convidado</h3>
+            <p class="gift-price">R$ 60.000,00</p>
+            <button class="btn-gift" data-gift="Levar alguém que não foi convidado" data-price="R$ 60.000,00">Presentear</button>
+        </div>
+
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/branco.jpeg" alt="ir de branco" class="gift-img">
+            </div>
+            <h3 class="gift-title">Ir de branco</h3>
+            <p class="gift-price">R$ 100.000,00</p>
+            <button class="btn-gift" data-gift="Ir de branco" data-price="R$ 100.000,00">Presentear</button>
+        </div>
+
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/jantar .jpeg" alt="Primeiro jantar dos noivos" class="gift-img">
+            </div>
+            <h3 class="gift-title">Primeiro jantar dos noivos</h3>
+            <p class="gift-price">R$ 150,00</p>
+            <button class="btn-gift" data-gift="Primeiro jantar dos noivos" data-price="R$ 150,00">Presentear</button>
+        </div>
+
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/photo.png" alt="Fotos da viagem" class="gift-img">
+            </div>
+            <h3 class="gift-title">Garantir que os noivos vão mandar fotos</h3>
+            <p class="gift-price">R$ 544,99</p>
+            <button class="btn-gift" data-gift="Fotos da viagem" data-price="R$ 544,99">Presentear</button>
+        </div>
+
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/nophoto.png" alt="Não mandar fotos" class="gift-img">
+            </div>
+            <h3 class="gift-title">Garantir que os noivos NÃO vão mandar fotos</h3>
+            <p class="gift-price">R$ 0,01</p>
+            <button class="btn-gift" data-gift="Não mandar fotos" data-price="R$ 0,01">Presentear</button>
+        </div>
+
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/carro.jpeg" alt="Aluguel do carro" class="gift-img">
+            </div>
+            <h3 class="gift-title">Aluguel do carro</h3>
+            <p class="gift-price">R$ 150,00</p>
+            <button class="btn-gift" data-gift="Aluguel do carro" data-price="R$ 150,00">Presentear</button>
+        </div>
+
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/guincho.jpeg" alt="Guincho" class="gift-img">
+            </div>
+            <h3 class="gift-title">Guincho para se o carro quebrar</h3>
+            <p class="gift-price">R$ 221,00</p>
+            <button class="btn-gift" data-gift="Guincho" data-price="R$ 221,00">Presentear</button>
+        </div>
+
+        <div class="gift-card">
+            <div class="gift-image-container">
+                <img src="images/vegano.jpeg" alt="Almoço especial Vegano" class="gift-img">
+            </div>
+            <h3 class="gift-title">Almoço especial Vegano</h3>
+            <p class="gift-price">R$ 165,00</p>
+            <button class="btn-gift" data-gift="Almoço Vegano" data-price="R$ 165,00">Presentear</button>
+        </div>
+    </div>
+</div>
                 <div style=" padding-bottom: 4vh; width: 100%;">
                 </div>
             </div>
