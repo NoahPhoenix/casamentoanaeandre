@@ -98,15 +98,15 @@
                     <div class="t-box"><span id="secs">00</span>Seg</div>
                 </div>
 
-    <div class="confirmation-area">
-    <button id="confirmBtn" class="btn">Confirmar Presença</button>
-    
-    <div id="confirmedMsg" class="confirmed-msg" style="display: none;">
-        <p>Presença Confirmada!</p>
-        <span id="guestCount">0</span>
-        <p>pessoas já confirmaram</p>
-    </div>
-</div>
+                <div class="confirmation-area">
+                    <button id="confirmBtn" class="btn">Confirmar Presença</button>
+
+                    <div id="confirmedMsg" class="confirmed-msg" style="display: none;">
+                        <p>Presença Confirmada!</p>
+                        <span id="guestCount">0</span>
+                        <p>pessoas já confirmaram</p>
+                    </div>
+                </div>
 
 
                 <div id="lista-presentes" class="gifts-container">
@@ -338,13 +338,26 @@
                         </div>
                     </div>
                 </div>
-                <div style=" padding-bottom: 4vh; width: 100%;">
-                </div>
-            </div>
+                <section class="comments-section">
+    <h3>Recados dos Convidados</h3>
+    
+    <div id="commentsList" class="comments-container">
         </div>
 
-        <button class="btn-gift" data-gift="Jogo de Panelas">Presentear</button>
+    <div class="pagination-controls">
+        <button id="prevComments" class="btn-nav">Anterior</button>
+        <span id="commentPageIndicator">Página 1</span>
+        <button id="nextComments" class="btn-nav">Próximo</button>
+    </div>
+</section>
+                <div style=" padding-bottom: 4vh; width: 100%;">
+                </div>
+                
+            </div>
 
+            
+        </div>
+        
         <div id="gift-modal" class="modal-overlay" style="display: none;">
             <div class="modal-content">
                 <button id="close-gift-modal" class="close-modal">&times;</button>
@@ -356,12 +369,13 @@
                 </div>
 
                 <div class="qr-code-area">
-                    <img src="URL_DO_QR_CODE" id="pix-qr-code" alt="QR Code PIX">
+                    <img src="images/qr-code-pix.png" id="pix-qr-code" alt="QR Code PIX">
                     <p>Escaneie o código acima no app do seu banco</p>
                 </div>
 
                 <div class="modal-item">
                     <label for="gift-comment">Deixe uma mensagem para nós:</label>
+                    <div> <br></br></div>
                     <textarea id="gift-comment" placeholder="Escreva aqui seu carinho..."></textarea>
                 </div>
 
@@ -372,7 +386,7 @@
 
         <div class="hint">Clique para abrir</div>
     </div>
-
+    
     <button class="debug-reset" id="debugResetBtn">RESET</button>
 
     <div id="infoModal" class="modal-overlay" style="display: none;">

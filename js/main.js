@@ -60,6 +60,7 @@ validarBotoesPresente();
 document.addEventListener('DOMContentLoaded', validarBotoesPresente);
     // Dentro da verificação do mainContainer no main.js
     
+    
     const navInfo = document.getElementById('navInfo');
     const infoModal = document.getElementById('infoModal');
     const closeModal = document.getElementById('closeModal');
@@ -376,6 +377,68 @@ document.getElementById('confirm-gift-btn').onclick = async () => {
                 alert("Erro ao salvar mensagem. Por favor, tente novamente.");
             }
         }
+        const commentsRef = database.ref('wedding/comments');
+let allComments = [];
+let currentCommentPage = 1;
+const commentsPerPage = 4;
+
+// 1. Escutar novos comentários do Firebase
+commentsRef.on('value', (snapshot) => {
+    const data = snapshot.val();
+    allComments = [];
+    
+    if (data) {
+        // Converte o objeto do Firebase em um array e inverte para ver os mais recentes primeiro
+        allComments = Object.values(data).reverse();
+    }
+    renderComments();
+});
+
+// 2. Função para renderizar os comentários na página atual
+function renderComments() {
+    const container = document.getElementById('commentsList');
+    const indicator = document.getElementById('commentPageIndicator');
+    container.innerHTML = '';
+
+    const startIndex = (currentCommentPage - 1) * commentsPerPage;
+    const endIndex = startIndex + commentsPerPage;
+    const paginatedComments = allComments.slice(startIndex, endIndex);
+
+    if (paginatedComments.length === 0) {
+        container.innerHTML = '<p class="no-comments">Ainda não há recados. Seja o primeiro!</p>';
+    } else {
+        paginatedComments.forEach(msg => {
+            const div = document.createElement('div');
+            div.className = 'comment-card';
+            div.innerHTML = `
+                <strong>${msg.name}</strong>
+                <p>${msg.text}</p>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    indicator.innerText = `Página ${currentCommentPage}`;
+    
+    // Desabilitar botões se não houver mais páginas
+    document.getElementById('prevComments').disabled = (currentCommentPage === 1);
+    document.getElementById('nextComments').disabled = (endIndex >= allComments.length);
+}
+
+// 3. Eventos dos botões de navegação
+document.getElementById('prevComments').addEventListener('click', () => {
+    if (currentCommentPage > 1) {
+        currentCommentPage--;
+        renderComments();
+    }
+});
+
+document.getElementById('nextComments').addEventListener('click', () => {
+    if ((currentCommentPage * commentsPerPage) < allComments.length) {
+        currentCommentPage++;
+        renderComments();
+    }
+});
     });
 
 
