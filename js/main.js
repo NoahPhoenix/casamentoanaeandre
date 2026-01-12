@@ -181,7 +181,7 @@ if (mainContainer) {
 
                     const btnEnviarRecado = document.getElementById('send-direct-comment');
                     if (btnEnviarRecado) {
-                        btnEnviarRecado.onclick = () => {
+                        btnEnviarRecado.onclick = () => {s
                             const texto = document.getElementById('direct-comment-text').value;
 
                             if (!texto) return alert("Escreva uma mensagem antes de enviar!");
