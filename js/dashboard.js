@@ -25,23 +25,28 @@ export function inicializarDashboard(convidadosRef) {
         });
     });
 
-    window.limparTodosConvidados = () => {
-        // Primeira confirmação
-        if (confirm("⚠️ ATENÇÃO: Você está prestes a apagar TODOS os convidados da base de dados. Esta ação não pode ser desfeita. Deseja continuar?")) {
+    window.limparTodosConvidados = async () => {
+    // Primeira confirmação de segurança
+    if (confirm("⚠️ ATENÇÃO: Você está prestes a apagar TODOS os dados do casamento (convidados, comentários e presentes). Esta ação não pode ser desfeita. Deseja continuar?")) {
 
-            // Segunda confirmação de segurança
-            if (confirm("Tem certeza absoluta? Todos os registros de confirmação e links enviados serão perdidos.")) {
-                convidadosRef.remove()
-                    .then(() => {
-                        alert("Base de dados limpa com sucesso!");
-                        editandoId = null; // Garante que sai de qualquer modo de edição
-                    })
-                    .catch((error) => {
-                        alert("Erro ao apagar dados: " + error.message);
-                    });
+        // Segunda confirmação para evitar acidentes
+        if (confirm("Tem certeza absoluta? Todos os registros serão perdidos permanentemente.")) {
+            try {
+                // Remove o nó principal 'wedding' que engloba tudo
+                // Isso limpa 'convidados', 'comments' e 'presentes_recebidos' de uma vez
+                await convidadosRef.parent.remove(); 
+
+                alert("Banco de dados resetado com sucesso!");
+                
+                // Recarrega a página para atualizar as estatísticas e a tabela
+                window.location.reload();
+            } catch (error) {
+                console.error("Erro ao resetar banco:", error);
+                alert("Erro ao apagar dados. Verifique as permissões do Firebase.");
             }
         }
-    };
+    }
+};
 
     const listaConvidadosTabela = document.getElementById('listaConvidados');
     let dadosLocais = {};
@@ -206,6 +211,35 @@ export function inicializarDashboard(convidadosRef) {
         dadosLocais = snap.val() || {};
         renderizarTabela();
     });
+
+    // --- LÓGICA DOS PRESENTES (ADICIONE AQUI DENTRO) ---
+    const presentesRef = convidadosRef.parent.child('comments');
+    const tabelaPresentes = document.getElementById('listaPresentesRecebidos');
+
+    if (tabelaPresentes) {
+        presentesRef.on('value', snap => {
+            const presentes = snap.val();
+            tabelaPresentes.innerHTML = '';
+
+            if (presentes) {
+                Object.values(presentes).reverse().forEach(p => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td style="font-size: 0.85em; color: #666;">${p.date || '-'}</td>
+                        <td><strong>${p.name || 'Convidado'}</strong></td>
+                        <td style="color: #8d6e63; font-weight: 600;">${p.giftItem || 'Presente'}</td>
+                        <td>${p.valor || '-'}</td>
+                        <td style="font-style: italic; font-size: 0.9em; color: #555;">
+                            "${p.text || ''}"
+                        </td>
+                    `;
+                    tabelaPresentes.appendChild(tr);
+                });
+            } else {
+                tabelaPresentes.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 20px;">Nenhum presente recebido.</td></tr>';
+            }
+        });
+    }
 
    // --- FUNÇÃO PARA EXPORTAR PLANILHA ---
 window.gerarPlanilha = () => {

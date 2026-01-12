@@ -27,6 +27,17 @@ if (document.getElementById('listaConvidados')) {
 const mainContainer = document.getElementById('mainContainer');
 if (mainContainer) {
 
+    const navComments = document.getElementById('navComments');
+if (navComments) {
+    navComments.onclick = (e) => {
+        e.preventDefault();
+        const section = document.querySelector('.comments-section');
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+}
+
     // Função para garantir que os botões obedeçam ao ID, sem bugar o layout
     function validarBotoesPresente() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -269,36 +280,37 @@ if (mainContainer) {
     // Defina estas funções fora de qualquer listener para serem globais
     let selectedGift = "";
 
-    function openGiftModal(giftName) {
+   window.openGiftModal = (giftName) => {
     selectedGift = giftName;
     const modal = document.getElementById('gift-modal');
     const qrImage = document.getElementById('qr-code-img');
     const valueDisplay = document.getElementById('pix-value-display');
 
     if (modal) {
-        // 1. Achar o valor do presente no botão clicado
+        // 1. Pega o preço do botão e limpa para formato numérico (ex: 150.00)
         const btn = document.querySelector(`[data-gift="${giftName}"]`);
-        const preco = btn ? btn.getAttribute('data-price') : "0.00";
-        
-        // 2. Exibir o valor no modal
+        let preco = btn ? btn.getAttribute('data-price') : "0.00";
+        let valorLimpo = preco.replace(/[^\d,.]/g, '').replace(',', '.');
+
         if (valueDisplay) valueDisplay.innerText = `R$ ${preco}`;
 
-        // 3. Gerar a URL do QR Code (Substitua os dados abaixo pelos seus)
-        const chavePix = "SUA_CHAVE_PIX_AQUI"; 
-        const nomeBeneficiario = "Ana e Andre";
-        const cidade = "SAO PAULO";
-        const valorLimpo = preco.replace(/[^\d,]/g, '').replace(',', '.');
+        // 2. Dados do PIX (SUBSTITUA PELOS SEUS DADOS REAIS)
+        const chavePix = import.meta.env.VITE_PIX_KEY;
+        const nomeRecebedor = "ANA E ANDRE";
+        const cidadeRecebedor = "SAO PAULO";
 
-        // Usando uma API pública para gerar o QR Code estático formatado para PIX
-        // Nota: Para um PIX real com valor, o ideal é usar o Payload completo. 
-        // Se quiser simplificar, gere um QR Code da sua chave e exiba o valor abaixo.
-        const pixPayload = `00020101021126580014br.gov.bcb.pix0114${chavePix}5204000053039865404${valorLimpo}5802BR5912${nomeBeneficiario}6009${cidade}62070503***6304`;
-        
-        qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixPayload)}`;
+        // 3. Gerar Payload usando uma API externa confiável para garantir o CRC16
+        // Isso evita que você tenha que implementar o cálculo complexo de CRC16 no JS
+        const pixUrl = `https://gerarqrcodepix.com.br/api/v1?nome=${encodeURIComponent(nomeRecebedor)}&cidade=${encodeURIComponent(cidadeRecebedor)}&chave=${encodeURIComponent(chavePix)}&valor=${valorLimpo}&saida=qr`;
+
+        // 4. Exibir o QR Code
+        if (qrImage) {
+            qrImage.src = pixUrl;
+        }
 
         modal.style.display = 'flex';
     }
-}
+};
 
     function closeGiftModal() {
         const modal = document.getElementById('gift-modal');

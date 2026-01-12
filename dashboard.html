@@ -187,6 +187,8 @@
         <tbody id="listaConvidados"></tbody>
     </table>
 
+    
+
     <div class="stats-footer">
 		<div class="stat-item"><span id="statPendente">0</span><label>Pendentes</label></div>
 		<div class="stat-item"><span id="statEnviado">0</span><label>Enviados</label></div>
@@ -194,7 +196,24 @@
         <div class="stat-item"><span id="statTotal">0</span><label>Total</label></div>
        
     </div>
+    <div style="margin-top: 50px;">
+    <h2 class="story-title" style="text-align: left; margin-bottom: 20px;">🎁 Presentes Recebidos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Convidado</th>
+                <th>Presente</th>
+                <th>Valor</th>
+                <th>Mensagem</th>
+            </tr>
+        </thead>
+        <tbody id="listaPresentesRecebidos">
+            </tbody>
+    </table>
 </div>
+</div>
+
 <button class="debug-danger-btn" onclick="limparTodosConvidados()" title="Debug: Limpar Base">
     🗑️
 </button>
