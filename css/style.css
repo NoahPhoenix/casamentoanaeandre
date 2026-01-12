@@ -280,28 +280,34 @@ body, html {
    7. MODAIS E INTERFACES
    ========================================================================== */
 .modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px);
-    z-index: 2000; display: flex; justify-content: center; align-items: center;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
 }
 
 /* Container must be relative for absolute positioning of the button */
 .modal-content {
     background: white;
-    padding: 2vh 30px; /* Padding vertical flexível */
+    padding: 2vh 25px;
     border-radius: 20px;
     width: 90%;
-    max-width: 400px;
+    max-width: 380px;
     position: relative;
     text-align: center;
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     
-    /* Configurações para não cortar nada */
     display: flex;
     flex-direction: column;
-    max-height: 95vh; /* Limite máximo de 95% da altura da tela */
-    overflow-y: auto; /* Scroll apenas se a tela for realmente minúscula */
-    gap: 1vh;         /* Espaço flexível entre elementos */
+    align-items: center; 
+    max-height: 98vh; /* Aproveita a altura máxima da tela */
+    gap: 0.5vh;       /* Espaçamento mínimo entre elementos */
+    overflow: hidden; /* Remove o scroll vertical */
 }
 
 /* Título e textos com tamanhos e margens flexíveis */
@@ -340,15 +346,12 @@ body, html {
 #gift-comment {
     width: 100%;
     height: 10vh;
-    min-height: 50px;    /* Garante que não suma */
-    padding: 10px;
-    border: 2px solid #e0d5d5;
+    min-height: 50px;
+    padding: 8px;
+    border: 2px solid #eee;
     border-radius: 12px;
     font-size: 14px;
-    resize: none;
-    flex-shrink: 0;      /* Evita que o navegador esmague o campo de texto */
 }
-
 /* BOTÃO CONFIRMAR: Centralizado horizontalmente */
 #confirm-gift-btn {
     display: block;
@@ -387,6 +390,9 @@ body, html {
     background: #e0d5d5 !important;
     color: var(--primary);
     transform: rotate(90deg);
+}
+.modal-item {
+    width: 90%;
 }
 
 
