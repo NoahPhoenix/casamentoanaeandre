@@ -320,11 +320,11 @@
 
                         <div class="gift-card">
                             <div class="gift-image-container">
-                                <img src="images/guincho.jpeg" alt="Guincho" class="gift-img">
+                                <img src="images/guincho.jpeg" alt="Guincho para se o carro quebrar" class="gift-img">
                             </div>
                             <h3 class="gift-title">Guincho para se o carro quebrar</h3>
                             <p class="gift-price">R$ 221,00</p>
-                            <button class="btn-gift" data-gift="Guincho" data-price="R$ 221,00">Presentear</button>
+                            <button class="btn-gift" data-gift="Guincho para se o carro quebrar" data-price="R$ 221,00">Presentear</button>
                         </div>
 
                         <div class="gift-card">
@@ -368,10 +368,11 @@
                         presente com todo carinho!</p>
                 </div>
 
-                <div class="qr-code-area">
-                    <img src="images/qr-code-pix.png" id="pix-qr-code" alt="QR Code PIX">
-                    <p>Escaneie o código acima no app do seu banco</p>
-                </div>
+                <div id="pix-payment-area" style="text-align: center; margin-bottom: 20px;">
+    <p style="font-size: 0.9em; color: #666;">Escaneie o QR Code para presentear:</p>
+    <img id="qr-code-img" src="" alt="QR Code PIX" style="width: 200px; height: 200px; border: 1px solid #eee; padding: 10px; border-radius: 10px;">
+    <p><strong>Valor: <span id="pix-value-display"></span></strong></p>
+</div>
 
                 <div class="modal-item">
                     <label for="gift-comment">Deixe uma mensagem para nós:</label>

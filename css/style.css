@@ -425,20 +425,31 @@ body, html {
 
 .comments-section {
     margin-top: 50px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 15px;
+    padding: 20px 0; /* Remove padding lateral para os cards encostarem nas bordas do alinhamento */
+    width: 100%;
+    max-width: 1200px; /* Mesma largura máxima que você usa na sua grid de presentes */
+    margin-left: auto;
+    margin-right: auto;
 }
 
+/* O container dos cards agora ocupa 100% da largura disponível */
+#commentsList {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Garante que o card individual se estique */
 .comment-card {
+    width: 100%; /* Faz o card ocupar toda a largura do bloco */
     background: white;
     color: #333;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     text-align: left;
-    animation: fadeIn 0.5s ease;
+    border: 1px solid rgba(0,0,0,0.05);
 }
 
 .comment-card strong {

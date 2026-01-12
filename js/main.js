@@ -266,19 +266,39 @@ if (mainContainer) {
         showPage(0);
     }
 
-    let currentGiftName = "";
-
     // Defina estas funções fora de qualquer listener para serem globais
     let selectedGift = "";
 
     function openGiftModal(giftName) {
-        selectedGift = giftName;
-        const modal = document.getElementById('gift-modal');
-        if (modal) {
-            modal.style.display = 'flex';
-            console.log("Abrindo modal para: " + giftName);
-        }
+    selectedGift = giftName;
+    const modal = document.getElementById('gift-modal');
+    const qrImage = document.getElementById('qr-code-img');
+    const valueDisplay = document.getElementById('pix-value-display');
+
+    if (modal) {
+        // 1. Achar o valor do presente no botão clicado
+        const btn = document.querySelector(`[data-gift="${giftName}"]`);
+        const preco = btn ? btn.getAttribute('data-price') : "0.00";
+        
+        // 2. Exibir o valor no modal
+        if (valueDisplay) valueDisplay.innerText = `R$ ${preco}`;
+
+        // 3. Gerar a URL do QR Code (Substitua os dados abaixo pelos seus)
+        const chavePix = "SUA_CHAVE_PIX_AQUI"; 
+        const nomeBeneficiario = "Ana e Andre";
+        const cidade = "SAO PAULO";
+        const valorLimpo = preco.replace(/[^\d,]/g, '').replace(',', '.');
+
+        // Usando uma API pública para gerar o QR Code estático formatado para PIX
+        // Nota: Para um PIX real com valor, o ideal é usar o Payload completo. 
+        // Se quiser simplificar, gere um QR Code da sua chave e exiba o valor abaixo.
+        const pixPayload = `00020101021126580014br.gov.bcb.pix0114${chavePix}5204000053039865404${valorLimpo}5802BR5912${nomeBeneficiario}6009${cidade}62070503***6304`;
+        
+        qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixPayload)}`;
+
+        modal.style.display = 'flex';
     }
+}
 
     function closeGiftModal() {
         const modal = document.getElementById('gift-modal');
@@ -289,12 +309,16 @@ if (mainContainer) {
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        let allComments = [];
+        let currentCommentPage = 1;
+        const commentsPerPage = 4;
+        const commentsRef = database.ref('wedding/comments');
+
+
         const giftModal = document.getElementById('gift-modal');
         const commentInput = document.getElementById('gift-comment');
         const confirmBtn = document.getElementById('confirm-gift-btn');
         const closeBtn = document.getElementById('close-gift-modal');
-
-        let selectedGift = "";
 
         // 1. Captura cliques nos botões de presente (usando delegação de evento)
         document.addEventListener('click', (e) => {
@@ -362,10 +386,12 @@ if (mainContainer) {
     }
 }
 
-        // 2. Função para renderizar os comentários na página atual
-        function renderComments() {
+// Procure por esta função no seu main.js e substitua:
+function renderComments() {
     const container = document.getElementById('commentsList');
     const indicator = document.getElementById('commentPageIndicator');
+    if (!container) return; // Segurança caso o elemento não exista
+
     container.innerHTML = '';
 
     const startIndex = (currentCommentPage - 1) * commentsPerPage;
@@ -378,13 +404,20 @@ if (mainContainer) {
         paginatedComments.forEach(msg => {
             const div = document.createElement('div');
             div.className = 'comment-card';
-            // Agora usamos msg.name e msg.text que definimos no passo anterior
+            
+            // Ajustado para os campos exatos que salvamos no passo anterior:
+            // msg.name, msg.giftItem e msg.text
             div.innerHTML = `
-                <div style="border-bottom: 1px solid #eee; margin-bottom: 5px; padding-bottom: 5px;">
-                    <strong style="color: var(--primary);">${msg.name}</strong>
-                    <small style="display: block; color: #666; font-size: 0.8em;">Presenteou com: ${msg.giftItem || 'Presente'}</small>
+                <div class="comment-header" style="margin-bottom: 8px;">
+                    <strong style="color: var(--primary); display: block;">${msg.name || "Convidado"}</strong>
+                    <small style="color: #888; font-size: 0.8em;">
+                        Presenteou com: <strong>${msg.giftItem || 'Presente'}</strong>
+                    </small>
                 </div>
-                <p style="font-style: italic;">"${msg.text}"</p>
+                <p style="font-style: italic; color: #444; margin: 0;">"${msg.text || ''}"</p>
+                <small style="display: block; text-align: right; font-size: 0.7em; color: #aaa; margin-top: 5px;">
+                    ${msg.date || ''}
+                </small>
             `;
             container.appendChild(div);
         });
@@ -392,27 +425,36 @@ if (mainContainer) {
 
     if (indicator) indicator.innerText = `Página ${currentCommentPage}`;
 
-    // Atualiza botões
+    // Atualiza estado dos botões de navegação
     const btnPrev = document.getElementById('prevComments');
     const btnNext = document.getElementById('nextComments');
     if (btnPrev) btnPrev.disabled = (currentCommentPage === 1);
     if (btnNext) btnNext.disabled = (endIndex >= allComments.length);
 }
 
-        // 3. Eventos dos botões de navegação
-        document.getElementById('prevComments').addEventListener('click', () => {
-            if (currentCommentPage > 1) {
-                currentCommentPage--;
-                renderComments();
-            }
-        });
+commentsRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        allComments = [];
+        if (data) {
+            // Converte objeto em array e ordena pelo mais recente
+            allComments = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+        }
+        renderComments(); // Chama a função para desenhar na tela
+    });
 
-        document.getElementById('nextComments').addEventListener('click', () => {
-            if ((currentCommentPage * commentsPerPage) < allComments.length) {
-                currentCommentPage++;
-                renderComments();
-            }
-        });
+        document.getElementById('prevComments').onclick = () => {
+        if (currentCommentPage > 1) {
+            currentCommentPage--;
+            renderComments();
+        }
+    };
+
+    document.getElementById('nextComments').onclick = () => {
+        if ((currentCommentPage * commentsPerPage) < allComments.length) {
+            currentCommentPage++;
+            renderComments();
+        }
+    };
     });
 
 
