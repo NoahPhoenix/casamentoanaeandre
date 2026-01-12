@@ -166,7 +166,7 @@ if (mainContainer) {
 
         userRef.on('value', snap => {
             const dados = snap.val();
-
+            console.log("Conteúdo do objeto dados:", dados);
             if (dados) {
                 // --- INSERÇÃO DO NOME (Ajuste aqui) ---
                 if (guestNameDisplay && dados.nome) {
@@ -174,23 +174,7 @@ if (mainContainer) {
                     if (guestWelcome) guestWelcome.style.display = 'block'; // Mostra a saudação
                 }
 
-                if (dados.status !== 'confirmado') {
-                    // Ainda não confirmou
-                    if (confirmBtn) confirmBtn.style.display = 'block';
-                    if (locationInfo) locationInfo.style.display = 'none';
-                    if (navInfo) navInfo.style.display = 'none';
-                    if (sepInfo) sepInfo.style.display = 'none';
-                } else {
-                    // JÁ CONFIRMOU: Mostra o local e o link no header
-                    if (confirmBtn) confirmBtn.style.display = 'none';
-                    if (confirmedMsg) confirmedMsg.style.display = 'block';
-                    if (locationInfo) locationInfo.style.display = 'block';
-
-                    // Exibe o botão "Informações" no header
-                    if (navInfo) navInfo.style.display = 'inline';
-                    if (sepInfo) sepInfo.style.display = 'inline';
-
-                    const nomeDoConvidado = dados.nome;
+                 const nomeDoConvidado = dados.nome;
                     // Exibe area de comentários
                     const areaComentario = document.getElementById('container-comentario-direto');
                     if (areaComentario) areaComentario.style.display = 'block';
@@ -217,6 +201,24 @@ if (mainContainer) {
                             });
                         };
                     }
+
+                if (dados.status !== 'confirmado') {
+                    // Ainda não confirmou
+                    if (confirmBtn) confirmBtn.style.display = 'block';
+                    if (locationInfo) locationInfo.style.display = 'none';
+                    if (navInfo) navInfo.style.display = 'none';
+                    if (sepInfo) sepInfo.style.display = 'none';
+                } else {
+                    // JÁ CONFIRMOU: Mostra o local e o link no header
+                    if (confirmBtn) confirmBtn.style.display = 'none';
+                    if (confirmedMsg) confirmedMsg.style.display = 'block';
+                    if (locationInfo) locationInfo.style.display = 'block';
+
+                    // Exibe o botão "Informações" no header
+                    if (navInfo) navInfo.style.display = 'inline';
+                    if (sepInfo) sepInfo.style.display = 'inline';
+
+                   
                 }
             }
         });
