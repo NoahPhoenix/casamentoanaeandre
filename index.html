@@ -3,14 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
     script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://www.gstatic.com https://cdn.jsdelivr.net https://*.firebaseio.com; 
     script-src-elem 'self' 'unsafe-inline' https://www.gstatic.com https://cdn.jsdelivr.net https://*.firebaseio.com;
-    connect-src 'self' https://*.firebaseio.com wss://*.firebaseio.com https://www.gstatic.com; 
+    /* ADICIONADO O DOMÍNIO DA API PIX ABAIXO */
+    connect-src 'self' https://*.firebaseio.com wss://*.firebaseio.com https://www.gstatic.com https://gerarqrcodepix.com.br; 
     worker-src 'self' blob:;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
     font-src 'self' https://fonts.gstatic.com; 
-    img-src 'self' data: *; 
+    img-src 'self' data: * https://gerarqrcodepix.com.br; 
     frame-src 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Convite André & Anna</title>
@@ -385,8 +386,24 @@
                 <div id="pix-payment-area" style="text-align: center; margin-bottom: 20px;">
     <p style="font-size: 0.9em; color: #666;">Escaneie o QR Code para presentear:</p>
     <img id="qr-code-img" src="" alt="QR Code PIX" style="width: 200px; height: 200px; border: 1px solid #eee; padding: 10px; border-radius: 10px;">
-    <p><strong>Valor: <span id="pix-value-display"></span></strong></p>
+        <p><strong>Valor: <span id="pix-value-display"></span></strong></p>
+    <div id="pix-copy-container" style="margin: 20px auto 10px; width: 100%; display: flex; flex-direction: column; align-items: center;">
+    <p style="font-size: 0.75rem; color: #888; margin-bottom: 8px;">Ou use o Pix Copia e Cola:</p>
+    
+    <input type="text" id="pix-payload" value="SUA_CHAVE_PIX_AQUI" readonly 
+        style="width: 100%; max-width: 280px; padding: 10px; border: 1px solid #eee; border-radius: 8px; font-size: 0.8rem; background: #fafafa; text-align: center; color: #666; font-family: monospace;">
+    
+    <button id="btn-copy-pix" style="background: none; border: none; color: var(--primary); font-size: 0.75rem; text-decoration: underline; cursor: pointer; padding: 10px; margin-top: 5px; font-family: 'Montserrat', sans-serif;">
+        Clique aqui para copiar o código
+    </button>
+
+    <span id="copy-status" style="display: block; font-size: 0.7rem; color: #d4af37; margin-top: 2px; opacity: 0; transition: opacity 0.3s; font-weight: bold;">
+        ✓ Copiado com sucesso!
+    </span>
 </div>
+
+</div>
+
 
                 <div class="modal-item">
                     <label for="gift-comment">Deixe uma mensagem para nós:</label>
@@ -402,7 +419,6 @@
         <div class="hint">Clique para abrir</div>
     </div>
     
-    <button class="debug-reset" id="debugResetBtn">RESET</button>
 
     <div id="infoModal" class="modal-overlay" style="display: none;">
         <div class="modal-content">

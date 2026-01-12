@@ -505,4 +505,16 @@ body, html {
     opacity: 0.3;
     cursor: not-allowed;
 }
+#pix-copy-container .btn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#pix-copy-container input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
 

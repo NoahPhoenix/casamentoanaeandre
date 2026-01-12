@@ -27,6 +27,28 @@ if (document.getElementById('listaConvidados')) {
 const mainContainer = document.getElementById('mainContainer');
 if (mainContainer) {
 
+    document.getElementById('btn-copy-pix').addEventListener('click', function() {
+    const pixInput = document.getElementById('pix-payload');
+    const statusText = document.getElementById('copy-status');
+
+    // Seleciona e copia o texto
+    pixInput.select();
+    pixInput.setSelectionRange(0, 99999); // Para dispositivos móveis
+    
+    navigator.clipboard.writeText(pixInput.value).then(() => {
+        // Feedback visual
+        this.innerText = 'Copiado!';
+        statusText.style.opacity = '1';
+
+        // Volta ao normal após 2 segundos
+        setTimeout(() => {
+            this.innerText = 'Copiar';
+            statusText.style.opacity = '0';
+        }, 2000);
+    }).catch(err => {
+        console.error('Erro ao copiar: ', err);
+    });
+});
     const navComments = document.getElementById('navComments');
     if (navComments) {
         navComments.onclick = (e) => {
@@ -313,6 +335,7 @@ if (mainContainer) {
         const modal = document.getElementById('gift-modal');
         const qrImage = document.getElementById('qr-code-img');
         const valueDisplay = document.getElementById('pix-value-display');
+        const pixInput = document.getElementById('pix-payload'); // O campo de texto
 
         if (modal) {
             // 1. Pega o preço do botão e limpa para formato numérico (ex: 150.00)
@@ -330,11 +353,27 @@ if (mainContainer) {
             // 3. Gerar Payload usando uma API externa confiável para garantir o CRC16
             // Isso evita que você tenha que implementar o cálculo complexo de CRC16 no JS
             const pixUrl = `https://gerarqrcodepix.com.br/api/v1?nome=${encodeURIComponent(nomeRecebedor)}&cidade=${encodeURIComponent(cidadeRecebedor)}&chave=${encodeURIComponent(chavePix)}&valor=${valorLimpo}&saida=qr`;
-
+            const pixTextUrl = `https://gerarqrcodepix.com.br/api/v1?nome=${encodeURIComponent(nomeRecebedor)}&cidade=${encodeURIComponent(cidadeRecebedor)}&chave=${encodeURIComponent(chavePix)}&valor=${valorLimpo}&saida=brcode`;
             // 4. Exibir o QR Code
             if (qrImage) {
                 qrImage.src = pixUrl;
             }
+            if (pixInput) {
+            pixInput.value = "Carregando código..."; // Feedback visual rápido
+            
+            fetch(pixTextUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // A API retorna um JSON. Ajustamos o valor do input com a string do código
+                    if (data && data.brcode) {
+                        pixInput.value = data.brcode;
+                    }
+                })
+                .catch(err => {
+                    console.error("Erro ao gerar código Pix:", err);
+                    pixInput.value = "Erro ao gerar código. Use o QR Code.";
+                });
+        }
 
             modal.style.display = 'flex';
         }
