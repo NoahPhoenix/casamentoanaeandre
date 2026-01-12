@@ -118,16 +118,28 @@ export function inicializarDashboard(convidadosRef) {
         const link = `${window.location.origin}?id=${id}`;
         navigator.clipboard.writeText(link).then(() => alert("Link copiado!"));
     };
+window.enviar = (id, tipo) => {
+    const c = dadosLocais[id];
+    const link = `${window.location.origin}?id=${id}`;
+    
+    const msg = `Olá, ${c.nome}! ✨\n\n` +
+                `Você está convidado para o nosso casamento! 🥂💍\n` +
+                `Queremos muito que você faça parte do nosso grande dia!\n\n` +
+                `📍 ACESSE SEU CONVITE AQUI:\n` +
+                `${link}\n\n` + // O link isolado fica mais "limpo" e fácil de clicar
+                `⚠️ Este convite é privado e individual.\n\n` +
+                `Com amor, André & Anna ❤️`;
 
-    window.enviar = (id, tipo) => {
-        const c = dadosLocais[id];
-        const link = `${window.location.origin}?id=${id}`;
-        const msg = `Olá ${c.nome}! Preparamos um convite especial para você. Veja aqui: ${link}`;
-        if (tipo === 'whats') window.open(`https://api.whatsapp.com/send?phone=55${c.whatsapp}&text=${encodeURIComponent(msg)}`);
-        else window.location.href = `mailto:${c.email}?subject=Nosso Convite&body=${encodeURIComponent(msg)}`;
+    if (tipo === 'whats') {
+        window.open(`https://api.whatsapp.com/send?phone=55${c.whatsapp}&text=${encodeURIComponent(msg)}`);
+    } else {
+        window.location.href = `mailto:${c.email}?subject=Nosso Convite Especial&body=${encodeURIComponent(msg)}`;
+    }
 
-        if (c.status === 'nao_enviado') convidadosRef.child(id).update({ status: 'enviado' });
-    };
+    if (c.status === 'nao_enviado') {
+        convidadosRef.child(id).update({ status: 'enviado' });
+    }
+};
 
     const renderizarTabela = () => {
         if (!listaConvidadosTabela) return;
