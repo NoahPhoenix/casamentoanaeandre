@@ -364,27 +364,48 @@ if (mainContainer) {
 
 // Função auxiliar para montar o código sem depender de API externa
 function gerarPayloadPix(chave, nome, cidade, valor) {
-    const format = (id, valor) => id + String(valor.length).padStart(2, '0') + valor;
+    const format = (id, conteúdo) => {
+        const tamanho = String(conteúdo.length).padStart(2, '0');
+        return id + tamanho + conteúdo;
+    };
     
-    // Montagem básica do padrão Pix (EMV QRCPS)
+    // 1. Merchant Account Information (Campo 26)
+    // O sub-campo 00 deve ser 'br.gov.bcb.pix' para conformidade total
+    const gui = format('00', 'br.gov.bcb.pix');
+    const key = format('01', chave);
+    const merchantAccountInfo = format('26', gui + key);
+
+    const valorFormatado = parseFloat(valor).toFixed(2);
+
     let payload = [
-        format('00', '01'), // Payload Format Indicator
-        format('26', format('01', chave)), // Merchant Account Information (Chave Pix)
-        format('52', '0000'), // Merchant Category Code
-        format('53', '986'), // Transaction Currency (BRL)
-        format('54', valor), // Transaction Amount
-        format('58', 'BR'), // Country Code
-        format('59', nome.substring(0, 25)), // Merchant Name
-        format('60', cidade.substring(0, 15)), // Merchant City
-        '6304' // CRC16 Indicator (Os 4 dígitos finais seriam o checksum)
+        format('00', '01'),                               // Payload Format Indicator
+        merchantAccountInfo,                              // Informações da Conta (Campo 26)
+        format('52', '0000'),                             // Merchant Category Code
+        format('53', '986'),                              // Moeda (BRL)
+        format('54', valorFormatado),                     // Valor
+        format('58', 'BR'),                               // Country Code
+        format('59', nome.substring(0, 25)),              // Nome do Recebedor
+        format('60', cidade.substring(0, 15).toUpperCase()), // Cidade
+        '6304'                                            // CRC Indicator
     ].join('');
 
-    // Nota: Para um Copia e Cola 100% funcional em todos os bancos, 
-    // o CRC16 (últimos 4 dígitos) deve ser calculado matematicamente.
-    // Como o cálculo de CRC16 é extenso, a forma mais segura de evitar CORS 
-    // e manter a funcionalidade é exibir apenas a chave se o cálculo local falhar.
-    
-    return payload; 
+    return payload + calcularCRC16(payload);
+}
+
+function calcularCRC16(str) {
+    let crc = 0xFFFF;
+    const polynomial = 0x1021;
+
+    for (let i = 0; i < str.length; i++) {
+        let b = str.charCodeAt(i);
+        for (let j = 0; j < 8; j++) {
+            let bit = ((b >> (7 - j) & 1) === 1);
+            let c15 = ((crc >> 15 & 1) === 1);
+            crc <<= 1;
+            if (c15 ^ bit) crc ^= polynomial;
+        }
+    }
+    return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
 }
 
     function closeGiftModal() {

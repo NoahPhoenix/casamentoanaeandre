@@ -147,7 +147,7 @@ body, html {
 .label { font-family: 'Playfair Display', serif; font-size: 1.2vh; letter-spacing: 2px; text-transform: uppercase; color: #444 !important; }
 .title { font-family: 'Dancing Script', cursive; font-size: 3.8vh; color: var(--primary) !important; margin: 0; line-height: 1; }
 .names { font-size: 5vh; font-family: 'Playfair Display', serif; font-weight: bold; line-height: 1.1; margin: 0.5vh 0; color: #333 !important; }
-.intro-text { font-size: 1.6vh; color: #666 !important; max-width: 85%; line-height: 1.3; }
+.intro-text { font-size: 1.6vh; color: #666 !important; line-height: 1.3; }
 
 .details { 
     width: 100%; border-top: 1px solid #eee; border-bottom: 1px solid #eee; 
@@ -288,13 +288,78 @@ body, html {
 /* Container must be relative for absolute positioning of the button */
 .modal-content {
     background: white;
-    padding: 40px 30px;
+    padding: 2vh 30px; /* Padding vertical flexível */
     border-radius: 20px;
     width: 90%;
     max-width: 400px;
-    position: relative; /* Essential */
+    position: relative;
     text-align: center;
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    
+    /* Configurações para não cortar nada */
+    display: flex;
+    flex-direction: column;
+    max-height: 95vh; /* Limite máximo de 95% da altura da tela */
+    overflow-y: auto; /* Scroll apenas se a tela for realmente minúscula */
+    gap: 1vh;         /* Espaço flexível entre elementos */
+}
+
+/* Título e textos com tamanhos e margens flexíveis */
+.modal-content h2.story-title {
+    font-size: clamp(1.2rem, 3vh, 1.8rem);
+    margin: 0;
+    line-height: 1.1;
+}
+
+.modal-content p, 
+.modal-content label {
+    font-size: clamp(0.75rem, 2vh, 0.9rem);
+    margin: 0.5vh 0;
+}
+#giftModal .modal-content {
+    max-height: 95vh; 
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza tudo horizontalmente (incluindo o botão) */
+    padding: 15px 25px;
+    overflow-y: auto; /* Se a tela for minúscula, permite scroll interno apenas como último recurso */
+    overflow-x: hidden;
+}
+
+#qr-code-img {
+    display: block;
+    margin: 0 auto;
+    max-height: 20vh;    /* Ocupa no máximo 20% da altura da tela */
+    width: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    flex-shrink: 1;      /* Permite encolher para salvar o resto do layout */
+}
+
+/* INPUT DE COMENTÁRIO: Espaço flexível mas com limite mínimo */
+#gift-comment {
+    width: 100%;
+    height: 10vh;
+    min-height: 50px;    /* Garante que não suma */
+    padding: 10px;
+    border: 2px solid #e0d5d5;
+    border-radius: 12px;
+    font-size: 14px;
+    resize: none;
+    flex-shrink: 0;      /* Evita que o navegador esmague o campo de texto */
+}
+
+/* BOTÃO CONFIRMAR: Centralizado horizontalmente */
+#confirm-gift-btn {
+    display: block;
+    margin: 5px auto 0 auto; /* O 'auto' nas laterais centraliza o botão */
+    padding: 12px 30px;
+    width: fit-content;
+    flex-shrink: 0;      /* Garante que o botão mantenha seu tamanho */
+}
+.modal-content br, 
+.modal-content div p:empty {
+    display: none !important;
 }
 
 /* Modern Close Button */
@@ -324,11 +389,16 @@ body, html {
     transform: rotate(90deg);
 }
 
-#gift-comment {
-    width: 100%; min-height: 120px; padding: 15px;
-    border: 2px solid #e0d5d5; border-radius: 12px;
-    font-family: inherit; font-size: 16px; resize: none;
-    outline: none; background-color: #fffafb;
+
+@media (max-height: 600px) {
+    .modal-content {
+        padding: 10px 20px;
+        gap: 0.5vh;
+    }
+    
+    #qr-code-img {
+        max-height: 15vh; /* QR Code diminui ainda mais para priorizar o botão e input */
+    }
 }
 
 /* ==========================================================================
@@ -518,3 +588,11 @@ body, html {
     border-color: var(--accent);
 }
 
+.btn-copy-pix {
+ margin-top: 20px;
+ gap: 5px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+
+}
