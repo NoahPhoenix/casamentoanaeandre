@@ -27,28 +27,28 @@ if (document.getElementById('listaConvidados')) {
 const mainContainer = document.getElementById('mainContainer');
 if (mainContainer) {
 
-    document.getElementById('btn-copy-pix').addEventListener('click', function() {
-    const pixInput = document.getElementById('pix-payload');
-    const statusText = document.getElementById('copy-status');
+    document.getElementById('btn-copy-pix').addEventListener('click', function () {
+        const pixInput = document.getElementById('pix-payload');
+        const statusText = document.getElementById('copy-status');
 
-    // Seleciona e copia o texto
-    pixInput.select();
-    pixInput.setSelectionRange(0, 99999); // Para dispositivos móveis
-    
-    navigator.clipboard.writeText(pixInput.value).then(() => {
-        // Feedback visual
-        this.innerText = 'Copiado!';
-        statusText.style.opacity = '1';
+        // Seleciona e copia o texto
+        pixInput.select();
+        pixInput.setSelectionRange(0, 99999); // Para dispositivos móveis
 
-        // Volta ao normal após 2 segundos
-        setTimeout(() => {
-            this.innerText = 'Copiar';
-            statusText.style.opacity = '0';
-        }, 2000);
-    }).catch(err => {
-        console.error('Erro ao copiar: ', err);
+        navigator.clipboard.writeText(pixInput.value).then(() => {
+            // Feedback visual
+            this.innerText = 'Copiado!';
+            statusText.style.opacity = '1';
+
+            // Volta ao normal após 2 segundos
+            setTimeout(() => {
+                this.innerText = 'Copiar';
+                statusText.style.opacity = '0';
+            }, 2000);
+        }).catch(err => {
+            console.error('Erro ao copiar: ', err);
+        });
     });
-});
     const navComments = document.getElementById('navComments');
     if (navComments) {
         navComments.onclick = (e) => {
@@ -174,33 +174,33 @@ if (mainContainer) {
                     if (guestWelcome) guestWelcome.style.display = 'block'; // Mostra a saudação
                 }
 
-                 const nomeDoConvidado = dados.nome;
-                    // Exibe area de comentários
-                    const areaComentario = document.getElementById('container-comentario-direto');
-                    if (areaComentario) areaComentario.style.display = 'block';
+                
+                const areaComentario = document.getElementById('container-comentario-direto');
+                if (areaComentario) areaComentario.style.display = 'block';
 
-                    const btnEnviarRecado = document.getElementById('send-direct-comment');
-                    if (btnEnviarRecado) {
-                        btnEnviarRecado.onclick = () => {s
-                            const texto = document.getElementById('direct-comment-text').value;
+                const btnEnviarRecado = document.getElementById('send-direct-comment');
+                if (btnEnviarRecado) {
+                    btnEnviarRecado.onclick = () => {
+                    
+                        const texto = document.getElementById('direct-comment-text').value;
 
-                            if (!texto) return alert("Escreva uma mensagem antes de enviar!");
-
-                            const novoRecado = {
-                                name: nomeDoConvidado || "Convidado Especial",
-                                text: texto,
-                                giftItem: "Apenas um recado ❤️",
-                                date: new Date().toLocaleDateString('pt-BR'),
-                                timestamp: Date.now()
-                            };
-
-                            database.ref('wedding/comments').push(novoRecado).then(() => {
-                                alert("Recado enviado com sucesso!");
-                                document.getElementById('direct-comment-text').value = '';
-                                if (typeof confetti === 'function') confetti();
-                            });
+                        if (!texto) return alert("Escreva uma mensagem antes de enviar!");
+                        const nomeDoConvidado = dados.nome;
+                        const novoRecado = {
+                            name: nomeDoConvidado || "Convidado Especial",
+                            text: texto,
+                            giftItem: "Apenas um recado ❤️",
+                            date: new Date().toLocaleDateString('pt-BR'),
+                            timestamp: Date.now()
                         };
-                    }
+
+                        database.ref('wedding/comments').push(novoRecado).then(() => {
+                            alert("Recado enviado com sucesso!");
+                            document.getElementById('direct-comment-text').value = '';
+                            if (typeof confetti === 'function') confetti();
+                        });
+                    };
+                }
 
                 if (dados.status !== 'confirmado') {
                     // Ainda não confirmou
@@ -218,7 +218,7 @@ if (mainContainer) {
                     if (navInfo) navInfo.style.display = 'inline';
                     if (sepInfo) sepInfo.style.display = 'inline';
 
-                   
+
                 }
             }
         });
@@ -333,82 +333,82 @@ if (mainContainer) {
     let selectedGift = "";
 
     window.openGiftModal = (giftName) => {
-    selectedGift = giftName;
-    const modal = document.getElementById('gift-modal');
-    const qrImage = document.getElementById('qr-code-img');
-    const valueDisplay = document.getElementById('pix-value-display');
-    const pixPayloadInput = document.getElementById('pix-payload');
+        selectedGift = giftName;
+        const modal = document.getElementById('gift-modal');
+        const qrImage = document.getElementById('qr-code-img');
+        const valueDisplay = document.getElementById('pix-value-display');
+        const pixPayloadInput = document.getElementById('pix-payload');
 
-    if (modal) {
-        const btn = document.querySelector(`[data-gift="${giftName}"]`);
-        let preco = btn ? btn.getAttribute('data-price') : "0.00";
-        let valorLimpo = preco.replace(/[^\d,.]/g, '').replace(',', '.');
+        if (modal) {
+            const btn = document.querySelector(`[data-gift="${giftName}"]`);
+            let preco = btn ? btn.getAttribute('data-price') : "0.00";
+            let valorLimpo = preco.replace(/[^\d,.]/g, '').replace(',', '.');
 
-        if (valueDisplay) valueDisplay.innerText = `R$ ${preco}`;
+            if (valueDisplay) valueDisplay.innerText = `R$ ${preco}`;
 
-        // Dados baseados no seu Firebase/Config
-        const chavePix = import.meta.env.VITE_PIX_KEY;
-        const nomeRecebedor = "ANA E ANDRE";
-        const cidadeRecebedor = "SAO PAULO";
+            // Dados baseados no seu Firebase/Config
+            const chavePix = import.meta.env.VITE_PIX_KEY;
+            const nomeRecebedor = "ANA E ANDRE";
+            const cidadeRecebedor = "SAO PAULO";
 
-        // 1. O QR Code (Imagem) continua via API pois renderizar imagem localmente exige bibliotecas pesadas
-        const pixUrlImg = `https://gerarqrcodepix.com.br/api/v1?nome=${encodeURIComponent(nomeRecebedor)}&cidade=${encodeURIComponent(cidadeRecebedor)}&chave=${encodeURIComponent(chavePix)}&valor=${valorLimpo}&saida=qr`;
-        if (qrImage) qrImage.src = pixUrlImg;
+            // 1. O QR Code (Imagem) continua via API pois renderizar imagem localmente exige bibliotecas pesadas
+            const pixUrlImg = `https://gerarqrcodepix.com.br/api/v1?nome=${encodeURIComponent(nomeRecebedor)}&cidade=${encodeURIComponent(cidadeRecebedor)}&chave=${encodeURIComponent(chavePix)}&valor=${valorLimpo}&saida=qr`;
+            if (qrImage) qrImage.src = pixUrlImg;
 
-        // 2. O Texto (Copia e Cola) geramos LOCALMENTE para evitar CORS e aumentar a segurança
-        // Usaremos uma versão simplificada do padrão EMV
-        const brCode = gerarPayloadPix(chavePix, nomeRecebedor, cidadeRecebedor, valorLimpo);
-        if (pixPayloadInput) pixPayloadInput.value = brCode;
+            // 2. O Texto (Copia e Cola) geramos LOCALMENTE para evitar CORS e aumentar a segurança
+            // Usaremos uma versão simplificada do padrão EMV
+            const brCode = gerarPayloadPix(chavePix, nomeRecebedor, cidadeRecebedor, valorLimpo);
+            if (pixPayloadInput) pixPayloadInput.value = brCode;
 
-        modal.style.display = 'flex';
-    }
-};
-
-// Função auxiliar para montar o código sem depender de API externa
-function gerarPayloadPix(chave, nome, cidade, valor) {
-    const format = (id, conteúdo) => {
-        const tamanho = String(conteúdo.length).padStart(2, '0');
-        return id + tamanho + conteúdo;
-    };
-    
-    // 1. Merchant Account Information (Campo 26)
-    // O sub-campo 00 deve ser 'br.gov.bcb.pix' para conformidade total
-    const gui = format('00', 'br.gov.bcb.pix');
-    const key = format('01', chave);
-    const merchantAccountInfo = format('26', gui + key);
-
-    const valorFormatado = parseFloat(valor).toFixed(2);
-
-    let payload = [
-        format('00', '01'),                               // Payload Format Indicator
-        merchantAccountInfo,                              // Informações da Conta (Campo 26)
-        format('52', '0000'),                             // Merchant Category Code
-        format('53', '986'),                              // Moeda (BRL)
-        format('54', valorFormatado),                     // Valor
-        format('58', 'BR'),                               // Country Code
-        format('59', nome.substring(0, 25)),              // Nome do Recebedor
-        format('60', cidade.substring(0, 15).toUpperCase()), // Cidade
-        '6304'                                            // CRC Indicator
-    ].join('');
-
-    return payload + calcularCRC16(payload);
-}
-
-function calcularCRC16(str) {
-    let crc = 0xFFFF;
-    const polynomial = 0x1021;
-
-    for (let i = 0; i < str.length; i++) {
-        let b = str.charCodeAt(i);
-        for (let j = 0; j < 8; j++) {
-            let bit = ((b >> (7 - j) & 1) === 1);
-            let c15 = ((crc >> 15 & 1) === 1);
-            crc <<= 1;
-            if (c15 ^ bit) crc ^= polynomial;
+            modal.style.display = 'flex';
         }
+    };
+
+    // Função auxiliar para montar o código sem depender de API externa
+    function gerarPayloadPix(chave, nome, cidade, valor) {
+        const format = (id, conteúdo) => {
+            const tamanho = String(conteúdo.length).padStart(2, '0');
+            return id + tamanho + conteúdo;
+        };
+
+        // 1. Merchant Account Information (Campo 26)
+        // O sub-campo 00 deve ser 'br.gov.bcb.pix' para conformidade total
+        const gui = format('00', 'br.gov.bcb.pix');
+        const key = format('01', chave);
+        const merchantAccountInfo = format('26', gui + key);
+
+        const valorFormatado = parseFloat(valor).toFixed(2);
+
+        let payload = [
+            format('00', '01'),                               // Payload Format Indicator
+            merchantAccountInfo,                              // Informações da Conta (Campo 26)
+            format('52', '0000'),                             // Merchant Category Code
+            format('53', '986'),                              // Moeda (BRL)
+            format('54', valorFormatado),                     // Valor
+            format('58', 'BR'),                               // Country Code
+            format('59', nome.substring(0, 25)),              // Nome do Recebedor
+            format('60', cidade.substring(0, 15).toUpperCase()), // Cidade
+            '6304'                                            // CRC Indicator
+        ].join('');
+
+        return payload + calcularCRC16(payload);
     }
-    return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
-}
+
+    function calcularCRC16(str) {
+        let crc = 0xFFFF;
+        const polynomial = 0x1021;
+
+        for (let i = 0; i < str.length; i++) {
+            let b = str.charCodeAt(i);
+            for (let j = 0; j < 8; j++) {
+                let bit = ((b >> (7 - j) & 1) === 1);
+                let c15 = ((crc >> 15 & 1) === 1);
+                crc <<= 1;
+                if (c15 ^ bit) crc ^= polynomial;
+            }
+        }
+        return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+    }
 
     function closeGiftModal() {
         const modal = document.getElementById('gift-modal');
