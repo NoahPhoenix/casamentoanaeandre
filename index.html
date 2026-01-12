@@ -344,17 +344,25 @@
                         </div>
                     </div>
                 </div>
-                <section class="comments-section">
-    <h3>Recados dos Convidados</h3>
+             <section class="comments-section">
+    <h3 class="story-title" style="font-size: 2.5vh; margin-bottom: 20px;">Recados dos Convidados</h3>
     
+    <div id="container-comentario-direto" class="comment-card send-box" style="display: none; margin-bottom: 30px;">
+        <h3 style="font-family: 'Playfair Display', serif; color: var(--primary); margin-bottom: 15px; font-size: 1.2rem;">
+            Deixe um recado para os noivos
+        </h3>
+        
+        <textarea id="direct-comment-text" placeholder="Escreva sua mensagem com carinho aqui..." 
+            style="width: 100%; padding: 15px; height: 100px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 15px; font-family: 'Montserrat', sans-serif; resize: none; background: #fafafa;">
+        </textarea>
+        
+        <button id="send-direct-comment" class="btn" style="width: 100%; margin: 0 auto; display: block;">
+            Enviar Recado
+        </button>
+    </div>
+
     <div id="commentsList" class="comments-container">
         </div>
-
-    <div class="pagination-controls">
-        <button id="prevComments" class="btn-nav">Anterior</button>
-        <span id="commentPageIndicator">Página 1</span>
-        <button id="nextComments" class="btn-nav">Próximo</button>
-    </div>
 </section>
                 <div style=" padding-bottom: 4vh; width: 100%;">
                 </div>

@@ -28,15 +28,15 @@ const mainContainer = document.getElementById('mainContainer');
 if (mainContainer) {
 
     const navComments = document.getElementById('navComments');
-if (navComments) {
-    navComments.onclick = (e) => {
-        e.preventDefault();
-        const section = document.querySelector('.comments-section');
-        if (section) {
-            section.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
-}
+    if (navComments) {
+        navComments.onclick = (e) => {
+            e.preventDefault();
+            const section = document.querySelector('.comments-section');
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+    }
 
     // Função para garantir que os botões obedeçam ao ID, sem bugar o layout
     function validarBotoesPresente() {
@@ -167,6 +167,34 @@ if (navComments) {
                     // Exibe o botão "Informações" no header
                     if (navInfo) navInfo.style.display = 'inline';
                     if (sepInfo) sepInfo.style.display = 'inline';
+
+                    const nomeDoConvidado = dados.nome;
+                    // Exibe area de comentários
+                    const areaComentario = document.getElementById('container-comentario-direto');
+                    if (areaComentario) areaComentario.style.display = 'block';
+
+                    const btnEnviarRecado = document.getElementById('send-direct-comment');
+                    if (btnEnviarRecado) {
+                        btnEnviarRecado.onclick = () => {
+                            const texto = document.getElementById('direct-comment-text').value;
+
+                            if (!texto) return alert("Escreva uma mensagem antes de enviar!");
+
+                            const novoRecado = {
+                                name: nomeDoConvidado || "Convidado Especial",
+                                text: texto,
+                                giftItem: "Apenas um recado ❤️",
+                                date: new Date().toLocaleDateString('pt-BR'),
+                                timestamp: Date.now()
+                            };
+
+                            database.ref('wedding/comments').push(novoRecado).then(() => {
+                                alert("Recado enviado com sucesso!");
+                                document.getElementById('direct-comment-text').value = '';
+                                if (typeof confetti === 'function') confetti();
+                            });
+                        };
+                    }
                 }
             }
         });
@@ -280,37 +308,37 @@ if (navComments) {
     // Defina estas funções fora de qualquer listener para serem globais
     let selectedGift = "";
 
-   window.openGiftModal = (giftName) => {
-    selectedGift = giftName;
-    const modal = document.getElementById('gift-modal');
-    const qrImage = document.getElementById('qr-code-img');
-    const valueDisplay = document.getElementById('pix-value-display');
+    window.openGiftModal = (giftName) => {
+        selectedGift = giftName;
+        const modal = document.getElementById('gift-modal');
+        const qrImage = document.getElementById('qr-code-img');
+        const valueDisplay = document.getElementById('pix-value-display');
 
-    if (modal) {
-        // 1. Pega o preço do botão e limpa para formato numérico (ex: 150.00)
-        const btn = document.querySelector(`[data-gift="${giftName}"]`);
-        let preco = btn ? btn.getAttribute('data-price') : "0.00";
-        let valorLimpo = preco.replace(/[^\d,.]/g, '').replace(',', '.');
+        if (modal) {
+            // 1. Pega o preço do botão e limpa para formato numérico (ex: 150.00)
+            const btn = document.querySelector(`[data-gift="${giftName}"]`);
+            let preco = btn ? btn.getAttribute('data-price') : "0.00";
+            let valorLimpo = preco.replace(/[^\d,.]/g, '').replace(',', '.');
 
-        if (valueDisplay) valueDisplay.innerText = `R$ ${preco}`;
+            if (valueDisplay) valueDisplay.innerText = `R$ ${preco}`;
 
-        // 2. Dados do PIX (SUBSTITUA PELOS SEUS DADOS REAIS)
-        const chavePix = import.meta.env.VITE_PIX_KEY;
-        const nomeRecebedor = "ANA E ANDRE";
-        const cidadeRecebedor = "SAO PAULO";
+            // 2. Dados do PIX (SUBSTITUA PELOS SEUS DADOS REAIS)
+            const chavePix = import.meta.env.VITE_PIX_KEY;
+            const nomeRecebedor = "ANA E ANDRE";
+            const cidadeRecebedor = "SAO PAULO";
 
-        // 3. Gerar Payload usando uma API externa confiável para garantir o CRC16
-        // Isso evita que você tenha que implementar o cálculo complexo de CRC16 no JS
-        const pixUrl = `https://gerarqrcodepix.com.br/api/v1?nome=${encodeURIComponent(nomeRecebedor)}&cidade=${encodeURIComponent(cidadeRecebedor)}&chave=${encodeURIComponent(chavePix)}&valor=${valorLimpo}&saida=qr`;
+            // 3. Gerar Payload usando uma API externa confiável para garantir o CRC16
+            // Isso evita que você tenha que implementar o cálculo complexo de CRC16 no JS
+            const pixUrl = `https://gerarqrcodepix.com.br/api/v1?nome=${encodeURIComponent(nomeRecebedor)}&cidade=${encodeURIComponent(cidadeRecebedor)}&chave=${encodeURIComponent(chavePix)}&valor=${valorLimpo}&saida=qr`;
 
-        // 4. Exibir o QR Code
-        if (qrImage) {
-            qrImage.src = pixUrl;
+            // 4. Exibir o QR Code
+            if (qrImage) {
+                qrImage.src = pixUrl;
+            }
+
+            modal.style.display = 'flex';
         }
-
-        modal.style.display = 'flex';
-    }
-};
+    };
 
     function closeGiftModal() {
         const modal = document.getElementById('gift-modal');
@@ -366,60 +394,60 @@ if (navComments) {
         }
 
         async function saveGiftComment(gift, message) {
-    try {
-        // AJUSTE 1: Salvar na mesma pasta que a lista de comentários lê
-        const commentsRef = database.ref('wedding/comments');
+            try {
+                // AJUSTE 1: Salvar na mesma pasta que a lista de comentários lê
+                const commentsRef = database.ref('wedding/comments');
 
-        // AJUSTE 2: Pegar o nome que está aparecendo na tela para o convidado
-        const nomeNaTela = document.getElementById('guestNameDisplay') ? document.getElementById('guestNameDisplay').innerText : "Convidado";
+                // AJUSTE 2: Pegar o nome que está aparecendo na tela para o convidado
+                const nomeNaTela = document.getElementById('guestNameDisplay') ? document.getElementById('guestNameDisplay').innerText : "Convidado";
 
-        const btnClicado = document.querySelector(`[data-gift="${gift}"]`);
-        const valorPresente = btnClicado ? btnClicado.getAttribute('data-price') : "Valor não informado";
+                const btnClicado = document.querySelector(`[data-gift="${gift}"]`);
+                const valorPresente = btnClicado ? btnClicado.getAttribute('data-price') : "Valor não informado";
 
-        const novoComentario = {
-            name: nomeNaTela,        
-            text: message,           
-            giftItem: gift,          
-            valor: valorPresente,
-            date: new Date().toLocaleString('pt-BR'),
-            timestamp: Date.now()    
-        };
+                const novoComentario = {
+                    name: nomeNaTela,
+                    text: message,
+                    giftItem: gift,
+                    valor: valorPresente,
+                    date: new Date().toLocaleString('pt-BR'),
+                    timestamp: Date.now()
+                };
 
-        console.log("Salvando objeto:", novoComentario); // Para você conferir no F12
+                console.log("Salvando objeto:", novoComentario); // Para você conferir no F12
 
-        await commentsRef.push(novoComentario);
+                await commentsRef.push(novoComentario);
 
-        alert("Mensagem salva com sucesso!");
-        closeModal();
+                alert("Mensagem salva com sucesso!");
+                closeModal();
 
-    } catch (error) {
-        console.error("Erro ao salvar no Firebase:", error);
-        alert("Erro ao salvar mensagem.");
-    }
-}
+            } catch (error) {
+                console.error("Erro ao salvar no Firebase:", error);
+                alert("Erro ao salvar mensagem.");
+            }
+        }
 
-// Procure por esta função no seu main.js e substitua:
-function renderComments() {
-    const container = document.getElementById('commentsList');
-    const indicator = document.getElementById('commentPageIndicator');
-    if (!container) return; // Segurança caso o elemento não exista
+        // Procure por esta função no seu main.js e substitua:
+        function renderComments() {
+            const container = document.getElementById('commentsList');
+            const indicator = document.getElementById('commentPageIndicator');
+            if (!container) return; // Segurança caso o elemento não exista
 
-    container.innerHTML = '';
+            container.innerHTML = '';
 
-    const startIndex = (currentCommentPage - 1) * commentsPerPage;
-    const endIndex = startIndex + commentsPerPage;
-    const paginatedComments = allComments.slice(startIndex, endIndex);
+            const startIndex = (currentCommentPage - 1) * commentsPerPage;
+            const endIndex = startIndex + commentsPerPage;
+            const paginatedComments = allComments.slice(startIndex, endIndex);
 
-    if (paginatedComments.length === 0) {
-        container.innerHTML = '<p class="no-comments">Ainda não há recados. Seja o primeiro!</p>';
-    } else {
-        paginatedComments.forEach(msg => {
-            const div = document.createElement('div');
-            div.className = 'comment-card';
-            
-            // Ajustado para os campos exatos que salvamos no passo anterior:
-            // msg.name, msg.giftItem e msg.text
-            div.innerHTML = `
+            if (paginatedComments.length === 0) {
+                container.innerHTML = '<p class="no-comments">Ainda não há recados. Seja o primeiro!</p>';
+            } else {
+                paginatedComments.forEach(msg => {
+                    const div = document.createElement('div');
+                    div.className = 'comment-card';
+
+                    // Ajustado para os campos exatos que salvamos no passo anterior:
+                    // msg.name, msg.giftItem e msg.text
+                    div.innerHTML = `
                 <div class="comment-header" style="margin-bottom: 8px;">
                     <strong style="color: var(--primary); display: block;">${msg.name || "Convidado"}</strong>
                     <small style="color: #888; font-size: 0.8em;">
@@ -431,42 +459,42 @@ function renderComments() {
                     ${msg.date || ''}
                 </small>
             `;
-            container.appendChild(div);
-        });
-    }
+                    container.appendChild(div);
+                });
+            }
 
-    if (indicator) indicator.innerText = `Página ${currentCommentPage}`;
+            if (indicator) indicator.innerText = `Página ${currentCommentPage}`;
 
-    // Atualiza estado dos botões de navegação
-    const btnPrev = document.getElementById('prevComments');
-    const btnNext = document.getElementById('nextComments');
-    if (btnPrev) btnPrev.disabled = (currentCommentPage === 1);
-    if (btnNext) btnNext.disabled = (endIndex >= allComments.length);
-}
-
-commentsRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        allComments = [];
-        if (data) {
-            // Converte objeto em array e ordena pelo mais recente
-            allComments = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+            // Atualiza estado dos botões de navegação
+            const btnPrev = document.getElementById('prevComments');
+            const btnNext = document.getElementById('nextComments');
+            if (btnPrev) btnPrev.disabled = (currentCommentPage === 1);
+            if (btnNext) btnNext.disabled = (endIndex >= allComments.length);
         }
-        renderComments(); // Chama a função para desenhar na tela
-    });
+
+        commentsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            allComments = [];
+            if (data) {
+                // Converte objeto em array e ordena pelo mais recente
+                allComments = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+            }
+            renderComments(); // Chama a função para desenhar na tela
+        });
 
         document.getElementById('prevComments').onclick = () => {
-        if (currentCommentPage > 1) {
-            currentCommentPage--;
-            renderComments();
-        }
-    };
+            if (currentCommentPage > 1) {
+                currentCommentPage--;
+                renderComments();
+            }
+        };
 
-    document.getElementById('nextComments').onclick = () => {
-        if ((currentCommentPage * commentsPerPage) < allComments.length) {
-            currentCommentPage++;
-            renderComments();
-        }
-    };
+        document.getElementById('nextComments').onclick = () => {
+            if ((currentCommentPage * commentsPerPage) < allComments.length) {
+                currentCommentPage++;
+                renderComments();
+            }
+        };
     });
 
 

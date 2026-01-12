@@ -451,6 +451,36 @@ body, html {
     text-align: left;
     border: 1px solid rgba(0,0,0,0.05);
 }
+.comments-section {
+    padding: 40px 20px;
+    margin: 0 auto;
+}
+
+/* A caixa de envio agora herda as propriedades do card de comentário */
+.comment-card.send-box {
+    border: 1px solid var(--accent); /* Um destaque suave para diferenciar da lista */
+    background-color: #fff;
+    cursor: default; /* Remove o ponteiro de clique nesta caixa específica */
+}
+
+.comment-card.send-box:hover {
+    transform: none; /* Remove o efeito de levitação para a caixa de texto */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* Garante que o botão dentro da caixa de comentário fique bem posicionado */
+.send-box .btn {
+    max-width: 100%;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+/* Estilo do título da seção */
+.story-title {
+    font-family: 'Dancing Script', cursive;
+    color: var(--primary);
+    text-align: center;
+}
 
 .comment-card strong {
     color: var(--accent);
