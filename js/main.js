@@ -552,19 +552,27 @@ if (mainContainer) {
             renderComments(); // Chama a função para desenhar na tela
         });
 
-        document.getElementById('prevComments').onclick = () => {
-            if (currentCommentPage > 1) {
-                currentCommentPage--;
-                renderComments();
-            }
-        };
+      // Ajuste com verificação de segurança (if)
+        const btnPrevComments = document.getElementById('prevComments');
+        const btnNextComments = document.getElementById('nextComments');
 
-        document.getElementById('nextComments').onclick = () => {
-            if ((currentCommentPage * commentsPerPage) < allComments.length) {
-                currentCommentPage++;
-                renderComments();
-            }
-        };
+        if (btnPrevComments) {
+            btnPrevComments.onclick = () => {
+                if (currentCommentPage > 1) {
+                    currentCommentPage--;
+                    renderComments();
+                }
+            };
+        }
+
+        if (btnNextComments) {
+            btnNextComments.onclick = () => {
+                if ((currentCommentPage * commentsPerPage) < allComments.length) {
+                    currentCommentPage++;
+                    renderComments();
+                }
+            };
+        }
     });
 
 
