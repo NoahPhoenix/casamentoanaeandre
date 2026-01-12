@@ -212,7 +212,7 @@ export function inicializarDashboard(convidadosRef) {
         renderizarTabela();
     });
 
-    // --- LÓGICA DOS PRESENTES (ADICIONE AQUI DENTRO) ---
+    // --- LÓGICA DOS PRESENTES ---
     const presentesRef = convidadosRef.parent.child('comments');
     const tabelaPresentes = document.getElementById('listaPresentesRecebidos');
 
@@ -222,7 +222,8 @@ export function inicializarDashboard(convidadosRef) {
             tabelaPresentes.innerHTML = '';
 
             if (presentes) {
-                Object.values(presentes).reverse().forEach(p => {
+                // Usamos Object.entries para pegar o ID (key) necessário para deletar
+                Object.entries(presentes).reverse().forEach(([key, p]) => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td style="font-size: 0.85em; color: #666;">${p.date || '-'}</td>
@@ -232,11 +233,14 @@ export function inicializarDashboard(convidadosRef) {
                         <td style="font-style: italic; font-size: 0.9em; color: #555;">
                             "${p.text || ''}"
                         </td>
+                        <td style="text-align: center;">
+                            <button class="btn-action btn-delete" onclick="excluirComentario('${key}')">🗑️</button>
+                        </td>
                     `;
                     tabelaPresentes.appendChild(tr);
                 });
             } else {
-                tabelaPresentes.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 20px;">Nenhum presente recebido.</td></tr>';
+                tabelaPresentes.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 20px;">Nenhum presente recebido.</td></tr>';
             }
         });
     }
@@ -267,6 +271,15 @@ window.gerarPlanilha = () => {
     link.download = `lista_convidados_${new Date().toLocaleDateString().replace(/\//g, '-')}.csv`;
     link.click();
 };
+
+// Função para excluir comentário individual
+    window.excluirComentario = (id) => {
+        if (confirm("Deseja realmente apagar este comentário?")) {
+            presentesRef.child(id).remove()
+                .then(() => alert("Comentário excluído!"))
+                .catch(error => console.error("Erro ao excluir:", error));
+        }
+    };
 
 // Vincula o clique do botão ID btnExportar à função acima
 const btnExportar = document.getElementById('btnExportar');
