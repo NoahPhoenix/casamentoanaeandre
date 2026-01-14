@@ -343,7 +343,7 @@ if (mainContainer) {
             const btn = document.querySelector(`[data-gift="${giftName}"]`);
             let preco = btn ? btn.getAttribute('data-price') : "0.00";
             let valorLimpo = preco.replace(/[^\d,.]/g, '').replace(',', '.');
-
+            
             if (valueDisplay) valueDisplay.innerText = `R$ ${preco}`;
 
             // Dados baseados no seu Firebase/Config
@@ -357,59 +357,71 @@ if (mainContainer) {
 
             // 2. O Texto (Copia e Cola) geramos LOCALMENTE para evitar CORS e aumentar a segurança
             // Usaremos uma versão simplificada do padrão EMV
-            const brCode = gerarPayloadPix(chavePix, nomeRecebedor, cidadeRecebedor, valorLimpo);
+            let valorParaPayload = parseFloat(valorLimpo).toFixed(2);
+            const brCode = gerarPayloadPix(chavePix, nomeRecebedor, cidadeRecebedor, valorParaPayload);
             if (pixPayloadInput) pixPayloadInput.value = brCode;
 
             modal.style.display = 'flex';
         }
     };
 
-    // Função auxiliar para montar o código sem depender de API externa
-    function gerarPayloadPix(chave, nome, cidade, valor) {
-        const format = (id, conteúdo) => {
-            const tamanho = String(conteúdo.length).padStart(2, '0');
-            return id + tamanho + conteúdo;
-        };
+// Função auxiliar para montar o código sem depender de API externa
+function gerarPayloadPix(chave, nome, cidade, valor) {
+    const format = (id, conteúdo) => {
+        // Garantimos que o conteúdo seja string e tratamos o tamanho real
+        const str = String(conteúdo);
+        const tamanho = str.length.toString().padStart(2, '0');
+        return id + tamanho + str;
+    };
 
-        // 1. Merchant Account Information (Campo 26)
-        // O sub-campo 00 deve ser 'br.gov.bcb.pix' para conformidade total
-        const gui = format('00', 'br.gov.bcb.pix');
-        const key = format('01', chave);
-        const merchantAccountInfo = format('26', gui + key);
+    // Limpeza de strings (Essencial para não quebrar o CRC16)
+    const limparString = (t) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    
+    const nomeLimpo = limparString(nome).substring(0, 25);
+    const cidadeLimpa = limparString(cidade).substring(0, 15);
+    const valorFormatado = parseFloat(valor).toFixed(2);
 
-        const valorFormatado = parseFloat(valor).toFixed(2);
+    // 1. Merchant Account Information
+    const gui = format('00', 'br.gov.bcb.pix');
+    const key = format('01', chave);
+    const merchantAccountInfo = format('26', gui + key);
 
-        let payload = [
-            format('00', '01'),                               // Payload Format Indicator
-            merchantAccountInfo,                              // Informações da Conta (Campo 26)
-            format('52', '0000'),                             // Merchant Category Code
-            format('53', '986'),                              // Moeda (BRL)
-            format('54', valorFormatado),                     // Valor
-            format('58', 'BR'),                               // Country Code
-            format('59', nome.substring(0, 25)),              // Nome do Recebedor
-            format('60', cidade.substring(0, 15).toUpperCase()), // Cidade
-            '6304'                                            // CRC Indicator
-        ].join('');
+    // 2. Additional Data Field (Campo 62) - OBRIGATÓRIO PARA ALGUNS BANCOS
+    // O valor '***' indica Transaction ID não preenchido
+    const additionalData = format('62', format('05', '***'));
 
-        return payload + calcularCRC16(payload);
-    }
+    let payload = [
+        format('00', '01'),               // Payload Format Indicator
+        merchantAccountInfo,              // Informações da Conta
+        format('52', '0000'),             // Merchant Category Code
+        format('53', '986'),              // Moeda (BRL)
+        format('54', valorFormatado),     // Valor
+        format('58', 'BR'),               // Country Code
+        format('59', nomeLimpo),          // Nome do Recebedor
+        format('60', cidadeLimpa),        // Cidade
+        additionalData,                   // Campo 62 adicionado aqui
+    ].join('');
 
-    function calcularCRC16(str) {
-        let crc = 0xFFFF;
-        const polynomial = 0x1021;
+    payload += '6304'; // CRC Indicator
 
-        for (let i = 0; i < str.length; i++) {
-            let b = str.charCodeAt(i);
-            for (let j = 0; j < 8; j++) {
-                let bit = ((b >> (7 - j) & 1) === 1);
-                let c15 = ((crc >> 15 & 1) === 1);
-                crc <<= 1;
-                if (c15 ^ bit) crc ^= polynomial;
-            }
+    return payload + calcularCRC16(payload);
+}
+
+function calcularCRC16(str) {
+    let crc = 0xFFFF;
+    const polynomial = 0x1021;
+
+    for (let i = 0; i < str.length; i++) {
+        let b = str.charCodeAt(i);
+        for (let j = 0; j < 8; j++) {
+            let bit = ((b >> (7 - j) & 1) === 1);
+            let c15 = ((crc >> 15 & 1) === 1);
+            crc <<= 1;
+            if (c15 ^ bit) crc ^= polynomial;
         }
-        return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
     }
-
+    return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+}
     function closeGiftModal() {
         const modal = document.getElementById('gift-modal');
         if (modal) {
